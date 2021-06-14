@@ -1,12 +1,12 @@
 package engine
 
 import (
-	"monitor/config"
-	"monitor/logger"
-	"monitor/model"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"monitor/config"
+	"monitor/logger"
+	"monitor/model"
 	"net/http"
 )
 
@@ -15,7 +15,6 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
 	out := make(chan Result)
 	engine.Scheduler.Run()
-	roomStatusList := make(map[int]bool)
 
 	for i := 0; i < engine.WorkerCount; i++ {
 		engine.createWorker(engine.Scheduler.WorkerChan(), out, engine.Scheduler)
@@ -23,10 +22,6 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
 	for _, request := range seeds {
 		engine.Scheduler.Submit(request)
-	}
-
-	for index := range config.RoomList {
-		roomStatusList[index] = false
 	}
 
 	result := <-out
@@ -37,13 +32,13 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 				switch liveData.LiveStatus {
 				case 0:
 					fmt.Println("尚未直播")
-					setRoomStatusFalse(roomStatusList, liveData)
+					setRoomStatusFalse(liveData)
 				case 1:
-					sendMessage(liveData, roomStatusList)
-					setRoomStatusTrue(roomStatusList, liveData)
+					sendMessage(liveData)
+					setRoomStatusTrue(liveData)
 				case 2:
 					fmt.Println("轮播中")
-					setRoomStatusFalse(roomStatusList, liveData)
+					setRoomStatusFalse(liveData)
 				}
 			}
 			engine.ItemChan <- item
@@ -54,24 +49,24 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
 }
 
-func setRoomStatusFalse(roomStatusList map[int]bool, liveData model.LiveData) {
-	if roomStatusList[liveData.RoomId] {
-		roomStatusList[liveData.RoomId] = false
+func setRoomStatusFalse(liveData model.LiveData) {
+	if config.RoomStatusList[liveData.RoomId] {
+		config.RoomStatusList[liveData.RoomId] = false
 	}
 }
 
-func setRoomStatusTrue(roomStatusList map[int]bool, liveData model.LiveData) {
-	if !roomStatusList[liveData.RoomId] {
-		roomStatusList[liveData.RoomId] = true
+func setRoomStatusTrue(liveData model.LiveData) {
+	if !config.RoomStatusList[liveData.RoomId] {
+		config.RoomStatusList[liveData.RoomId] = true
 	}
 }
 
-func sendMessage(liveData model.LiveData, roomStatusList map[int]bool) {
+func sendMessage(liveData model.LiveData) {
 	log := logger.Logger{}.InitLogger().Logger
 	sugar := log.Sugar()
 
 	fmt.Println("直播中")
-	if !roomStatusList[liveData.RoomId] {
+	if !config.RoomStatusList[liveData.RoomId] {
 		url := "https://sctapi.ftqq.com/SCT45921Tqj6arbImzDYshqstl5siyKf9.send?title=" + config.RoomList[liveData.RoomId] + "&desp=开播啦!"
 		header := "application/json;charset=UTF-8"
 		postResponse, postResponseErr := http.Post(url, header, nil)

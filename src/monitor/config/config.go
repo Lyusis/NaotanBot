@@ -1,17 +1,19 @@
 package config
 
 import (
-	"monitor/logger"
 	"io/ioutil"
+	"monitor/logger"
 	"strconv"
 	"strings"
 )
 
 var (
 	// Wait Rate limiting seed, Second
-	Wait = 60
+	Wait = 10
 	// RoomList Map of LivingRoom
 	RoomList = make(map[int]string)
+	// RoomStatusList Map of Room Status
+	RoomStatusList = make(map[int]bool)
 )
 
 func Init() {
@@ -32,5 +34,9 @@ func Init() {
 		} else {
 			RoomList[id] = kv[1]
 		}
+	}
+
+	for index := range RoomList {
+		RoomStatusList[index] = false
 	}
 }
