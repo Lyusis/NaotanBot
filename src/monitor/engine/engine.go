@@ -41,12 +41,11 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 					setRoomStatusFalse(liveData)
 				}
 			}
-			engine.ItemChan <- item
 			// TODO: 将数据放入数据库
+			engine.ItemChan <- item
 
 		}(item)
 	}
-
 }
 
 func setRoomStatusFalse(liveData model.LiveData) {
@@ -62,8 +61,6 @@ func setRoomStatusTrue(liveData model.LiveData) {
 }
 
 func sendMessage(liveData model.LiveData) {
-	log := logger.Logger{}.InitLogger().Logger
-	sugar := log.Sugar()
 
 	fmt.Println("直播中")
 	if !config.RoomStatusList[liveData.RoomId] {
@@ -71,22 +68,22 @@ func sendMessage(liveData model.LiveData) {
 		header := "application/json;charset=UTF-8"
 		postResponse, postResponseErr := http.Post(url, header, nil)
 		if postResponseErr != nil {
-			sugar.Warn(postResponseErr)
+			logger.Logger.Sugar().Warn(postResponseErr)
 		}
 		jsonAll, jsonErr := ioutil.ReadAll(postResponse.Body)
 		if jsonErr != nil {
-			sugar.Warn(jsonErr)
+			logger.Logger.Sugar().Warn(jsonErr)
 		}
 
 		jsonData := saberserverResponse{}
 		unmarshalErr := json.Unmarshal(jsonAll, &jsonData)
 		if unmarshalErr != nil {
-			sugar.Warn(unmarshalErr)
-			log.Warn("json解析失败")
+			logger.Logger.Sugar().Warn(unmarshalErr)
+			logger.Logger.Warn("json解析失败")
 		}
 
 		if jsonData.Code != 0 {
-			sugar.Warnf("发送请求失败, 失败理由: %s", jsonData.Message)
+			logger.Logger.Sugar().Warnf("发送请求失败, 失败理由: %s", jsonData.Message)
 		}
 	}
 }

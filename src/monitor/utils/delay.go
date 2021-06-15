@@ -1,25 +1,19 @@
 package utils
 
 import (
+	"go.uber.org/zap"
 	"monitor/config"
 	"monitor/logger"
-	"go.uber.org/zap"
-	"math/rand"
 	"time"
 )
 
-func Delay(url string) {
+func Delay() {
 
-	log := logger.Logger{}.InitLogger().Logger
-	waitTime := config.Wait + rand.Intn(config.Wait/6)
+	waitTime := config.Wait
 	rateLimiter := time.Tick(
-		time.Duration(waitTime)*time.Second +
-			time.Duration(waitTime)*time.Millisecond)
+		time.Duration(waitTime) * time.Second)
 
-	log.Info("Fetching: ",
-		zap.String("URL", url),
-		zap.Int("WaitingTime", waitTime))
+	logger.Logger.Info("Waiting...", zap.Int("Time", waitTime))
 
 	<-rateLimiter
-
 }

@@ -6,17 +6,16 @@ import (
 	"os"
 )
 
-type Logger struct {
+var (
 	Logger *zap.Logger
-}
+)
 
 // InitLogger 初始化日志 /**
-func (logger Logger) InitLogger() Logger {
+func init() {
 	//writeSyncer := getLogWriter()
 	encoder := getEncoder()
 	core := zapcore.NewCore(encoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel)
-	logger.Logger = zap.New(core, zap.AddCaller())
-	return logger
+	Logger = zap.New(core, zap.AddCaller())
 }
 
 /**

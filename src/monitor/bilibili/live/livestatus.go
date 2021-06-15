@@ -1,21 +1,19 @@
 package live
 
 import (
+	"encoding/json"
 	"monitor/engine"
 	"monitor/logger"
 	"monitor/model"
-	"encoding/json"
 )
 
 func GetLiveData(contents []byte) engine.Result {
-	log := logger.Logger{}.InitLogger().Logger
-	sugar := log.Sugar()
 
 	liveResponse := model.LiveResponse{}
 
 	liveResponseErr := json.Unmarshal(contents, &liveResponse)
 	if liveResponseErr != nil {
-		sugar.Warn(liveResponseErr)
+		logger.Logger.Sugar().Warn(liveResponseErr)
 	}
 
 	result := engine.Result{}

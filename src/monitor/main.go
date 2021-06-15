@@ -6,7 +6,6 @@ import (
 	"monitor/engine"
 	"monitor/persist"
 	"monitor/scheduler"
-	"monitor/utils"
 	"strconv"
 )
 
@@ -15,8 +14,6 @@ var (
 )
 
 func main() {
-
-	config.Init()
 
 	e := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
@@ -28,7 +25,6 @@ func main() {
 	for {
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
-			utils.Delay(url)
 			e.Run(engine.Request{
 				Url:    url,
 				Name:   name,
