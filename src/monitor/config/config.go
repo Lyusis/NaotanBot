@@ -9,7 +9,7 @@ import (
 
 var (
 	// Wait Rate limiting seed, Second
-	Wait = 1
+	Wait = 10
 	// RoomList Map of LivingRoom
 	RoomList = make(map[int]string)
 	// RoomStatusList Map of Room Status
@@ -26,10 +26,11 @@ func init() {
 	lines := strings.Split(string(fileBytes), "\n")
 	for _, line := range lines {
 		kv := strings.Fields(line)
-		id, idOk := strconv.Atoi(kv[0])
+		id, idErr := strconv.Atoi(kv[0])
 
-		if idOk != nil {
-			logger.Logger.Warn("配置失败, 请确认后重试。")
+		if idErr != nil {
+			logger.Logger.Sugar().Panic(idErr)
+			logger.Logger.Panic("配置失败, 请确认后重试。")
 		} else {
 			RoomList[id] = kv[1]
 		}

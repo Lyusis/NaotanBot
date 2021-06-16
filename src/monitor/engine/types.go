@@ -35,10 +35,6 @@ type Scheduler interface {
 	Run()
 }
 
-//type Item struct {
-//	Item interface{}
-//}
-
 type Request struct {
 	Url    string
 	Name   string
@@ -50,10 +46,6 @@ type saberserverResponse struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
-
-//type Parser interface {
-//	Parse(contents []byte) Result
-//}
 
 type Result struct {
 	Items []interface{}

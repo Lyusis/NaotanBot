@@ -6,6 +6,7 @@ import (
 	"monitor/engine"
 	"monitor/persist"
 	"monitor/scheduler"
+	"monitor/utils"
 	"strconv"
 )
 
@@ -23,6 +24,7 @@ func main() {
 	}
 
 	for {
+		utils.Delay()
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
 			e.Run(engine.Request{
@@ -32,5 +34,4 @@ func main() {
 			})
 		}
 	}
-
 }

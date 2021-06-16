@@ -34,6 +34,7 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 					fmt.Println("尚未直播")
 					setRoomStatusFalse(liveData)
 				case 1:
+					fmt.Println("直播中")
 					sendMessage(liveData)
 					setRoomStatusTrue(liveData)
 				case 2:
@@ -62,7 +63,6 @@ func setRoomStatusTrue(liveData model.LiveData) {
 
 func sendMessage(liveData model.LiveData) {
 
-	fmt.Println("直播中")
 	if !config.RoomStatusList[liveData.RoomId] {
 		url := "https://sctapi.ftqq.com/SCT45921Tqj6arbImzDYshqstl5siyKf9.send?title=" + config.RoomList[liveData.RoomId] + "&desp=开播啦!"
 		header := "application/json;charset=UTF-8"
