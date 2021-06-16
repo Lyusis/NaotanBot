@@ -1,7 +1,6 @@
 package persist
 
 import (
-	"go.uber.org/zap"
 	"monitor/logger"
 )
 
@@ -12,9 +11,7 @@ func ItemSaver() chan interface{} {
 		for {
 			item := <-in
 			//log.Info(`Saving #itemCount #item`)
-			logger.Logger.Info("Saving: ",
-				zap.Int("No", itemCount),
-				zap.Any("Context", item))
+			logger.Info("Saving... \tNo.%d|\tContext: %+v", itemCount, item)
 			itemCount++
 		}
 	}()

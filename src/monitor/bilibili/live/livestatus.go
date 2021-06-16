@@ -13,7 +13,7 @@ func GetLiveData(contents []byte) engine.Result {
 
 	liveResponseErr := json.Unmarshal(contents, &liveResponse)
 	if liveResponseErr != nil {
-		logger.Logger.Sugar().Warn(liveResponseErr)
+		logger.Warn("直播信息json解析错误\t%+v", liveResponseErr)
 	}
 
 	result := engine.Result{}

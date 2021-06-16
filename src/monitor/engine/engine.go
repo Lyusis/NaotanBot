@@ -36,6 +36,7 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 				case 1:
 					fmt.Println("直播中")
 					sendMessage(liveData)
+					sendQQMessage(liveData)
 					setRoomStatusTrue(liveData)
 				case 2:
 					fmt.Println("轮播中")
@@ -68,22 +69,47 @@ func sendMessage(liveData model.LiveData) {
 		header := "application/json;charset=UTF-8"
 		postResponse, postResponseErr := http.Post(url, header, nil)
 		if postResponseErr != nil {
-			logger.Logger.Sugar().Warn(postResponseErr)
+			logger.Warn("信息发送返回json接收失败\t%+v", postResponseErr)
 		}
 		jsonAll, jsonErr := ioutil.ReadAll(postResponse.Body)
 		if jsonErr != nil {
-			logger.Logger.Sugar().Warn(jsonErr)
+			logger.Warn("信息发送返回json读取失败\t%+v", jsonErr)
 		}
 
 		jsonData := saberserverResponse{}
 		unmarshalErr := json.Unmarshal(jsonAll, &jsonData)
 		if unmarshalErr != nil {
-			logger.Logger.Sugar().Warn(unmarshalErr)
-			logger.Logger.Warn("json解析失败")
+			logger.Warn("信息发送返回json解析失败\t%+v", unmarshalErr)
 		}
 
 		if jsonData.Code != 0 {
-			logger.Logger.Sugar().Warnf("发送请求失败, 失败理由: %s", jsonData.Message)
+			logger.Warn("发送请求失败\t%+v", jsonData.Message)
 		}
+	}
+}
+
+func sendQQMessage(liveData model.LiveData) {
+	if !config.RoomStatusList[liveData.RoomId] {
+		url := "http://127.0.0.1:5700/send_group_msg?group_id=540419281&message=" + config.RoomList[liveData.RoomId] + "开播啦"
+		getResponse, getResponseErr := http.Get(url)
+		if getResponseErr != nil {
+			logger.Warn("信息发送返回json接收失败\t%+v", getResponseErr)
+		}
+
+		jsonAll, jsonErr := ioutil.ReadAll(getResponse.Body)
+		if jsonErr != nil {
+			logger.Warn("信息发送返回json读取失败\t%+v", jsonErr)
+		}
+
+		jsonData := saberserverResponse{}
+		unmarshalErr := json.Unmarshal(jsonAll, &jsonData)
+		if unmarshalErr != nil {
+			logger.Warn("信息发送返回json解析失败\t%+v", unmarshalErr)
+		}
+
+		if jsonData.Code != 0 {
+			logger.Warn("发送请求失败\t%+v", jsonData.Message)
+		}
+
 	}
 }
