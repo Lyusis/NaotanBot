@@ -24,7 +24,7 @@ func main() {
 	}
 
 	for {
-		utils.Delay()
+		utils.Delay(0)
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
 			e.Run(engine.Request{
