@@ -41,12 +41,6 @@ type Request struct {
 	Parser func([]byte) Result
 }
 
-type saberserverResponse struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
 type Result struct {
 	Items []interface{}
 }

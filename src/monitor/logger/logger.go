@@ -1,12 +1,16 @@
 package logger
 
 import (
-	"github.com/lestrrat-go/file-rotatelogs"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
-	"log"
 	"time"
+)
+
+const (
+	TimeFormat = "2006-01-02 15:04:05"
+	TimeFormatDate = "2006-01-02"
 )
 
 var (
@@ -47,13 +51,11 @@ func init() {
 	writeWarnSyncer := getLogWriter("WARN")
 
 	encoder := getEncoder()
-	//core := zapcore.NewCore(encoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel)
 
 	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, zapcore.AddSync(writeInfoSyncer), infoLevel),
 		zapcore.NewCore(encoder, zapcore.AddSync(writeWarnSyncer), warnLevel),
-		//zapcore.NewCore(encoder,
-		//	zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)), logLevel),
+		//zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)), logLevel),
 	)
 
 	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel))
@@ -67,16 +69,14 @@ func getEncoder() zapcore.Encoder {
 	config := zapcore.EncoderConfig{
 		MessageKey:  "msg",
 		LevelKey:    "level",
-		EncodeLevel: zapcore.CapitalLevelEncoder, //将级别转换成大写
+		EncodeLevel: zapcore.CapitalLevelEncoder, 
 		TimeKey:     "ts",
 		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-			enc.AppendString(t.Format("2006-01-02 15:04:05"))
+			enc.AppendString(t.Format(TimeFormat))
 		},
 		CallerKey:    "file",
 		EncodeCaller: zapcore.ShortCallerEncoder,
-		EncodeDuration: func(d time.Duration, enc zapcore.PrimitiveArrayEncoder) {
-			enc.AppendInt64(int64(d) / 1000000)
-		},
+		EncodeDuration: zapcore.SecondsDurationEncoder,
 	}
 	encoderConfig := zapcore.NewConsoleEncoder(config)
 	return encoderConfig
@@ -87,18 +87,13 @@ func getEncoder() zapcore.Encoder {
  * @return zapcore.WriteSyncer
  */
 func getLogWriter(filename string) io.Writer {
-	// demo.log是指向最新日志的链接
-	hook, err := rotatelogs.New(
-		`./logs/`+filename+".%Y%m%d%H.log",
-		rotatelogs.WithLinkName(filename),
-		rotatelogs.WithMaxAge(time.Hour*24*30),    // 保存30天
-		rotatelogs.WithRotationTime(time.Hour*24), //切割频率 24小时
-	)
-	if err != nil {
-		log.Println("日志启动异常")
-		panic(err)
-	}
-	return hook
+	return &lumberjack.Logger{
+		Filename: `./logs/`+filename+"." + time.Now().Format(TimeFormatDate) +".log",
+		MaxSize: 10,
+		MaxBackups:5,
+		MaxAge: 30,
+		Compress: true, 
+	  }
 }
 
 // Debug logs.Debug(...)
