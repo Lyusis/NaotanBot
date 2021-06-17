@@ -26,12 +26,17 @@ func init() {
 
 	fileBytes, err := ioutil.ReadFile("src/monitor/config/virtual_liver_list.txt")
 	if err != nil {
-		logger.Panic("文件读取失败\t%+v", err)
+		logger.Panic("配置文件读取失败\t%+v", err)
 	}
 	lines := strings.Split(string(fileBytes), "\n")
 	for _, line := range lines {
 		kv := strings.Fields(line)
 		id, idErr := strconv.Atoi(kv[0])
+		if idErr != nil {
+			logger.Panic("配置失败\t%+v", idErr)
+		}
+		RoomList[id] = kv[1]
+	}
 
 	// RoomList[6775697] = "海苹果小学校"
 	// RoomList[22470204] = "瑞芙"
