@@ -25,36 +25,38 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	for _, item := range result.Items {
 		go func(item interface{}) {
 			if liveData, ok := item.(model.LiveData); ok {
-				fmt.Print(config.RoomList[liveData.RoomId] + ": ")
+				name := config.RoomList[liveData.RoomId]
+				fmt.Print(name + ": ")
 				switch liveData.LiveStatus {
 				case 0:
 					fmt.Println("尚未直播")
-					setRoomStatusFalse(liveData)
+					setRoomStatusFalse(liveData.RoomId)
 				case 1:
 					fmt.Println("直播中")
-					api.SendBarkMessage(liveData)
-					api.SendQQMessage(liveData)
-					setRoomStatusTrue(liveData)
+					if !config.RoomStatusList[liveData.RoomId] {
+						api.SendBarkMessage(name, "开播啦!")
+						api.SendQQGroupMessage(config.GroupId, name + "开播啦!")
+					}
+					setRoomStatusTrue(liveData.RoomId)
 				case 2:
 					fmt.Println("轮播中")
-					setRoomStatusFalse(liveData)
+					setRoomStatusFalse(liveData.RoomId)
 				}
 			}
 			// TODO: 将数据放入数据库
 			engine.ItemChan <- item
-
 		}(item)
 	}
 }
 
-func setRoomStatusFalse(liveData model.LiveData) {
-	if config.RoomStatusList[liveData.RoomId] {
-		config.RoomStatusList[liveData.RoomId] = false
+func setRoomStatusFalse(roomId int) {
+	if config.RoomStatusList[roomId] {
+		config.RoomStatusList[roomId] = false
 	}
 }
 
-func setRoomStatusTrue(liveData model.LiveData) {
-	if !config.RoomStatusList[liveData.RoomId] {
-		config.RoomStatusList[liveData.RoomId] = true
+func setRoomStatusTrue(roomId int) {
+	if !config.RoomStatusList[roomId] {
+		config.RoomStatusList[roomId] = true
 	}
 }
