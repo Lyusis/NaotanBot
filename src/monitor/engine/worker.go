@@ -7,7 +7,7 @@ import (
 
 func Worker(request Request) (Result, error) {
 
-	logger.Info("Fetching...\tUrl: %s |\tName: %s", request.Url, request.Name)
+	logger.Info("Fetching...\t| Url: %s\t| Name: %s", request.Url, request.Name)
 	body, bodyErr := fetcher.GetFetcher(request.Url)
 	if bodyErr != nil {
 		return Result{}, bodyErr

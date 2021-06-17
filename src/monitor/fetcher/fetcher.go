@@ -18,7 +18,7 @@ func GetFetcher(url string) ([]byte, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Warn("关闭Request失败\t%+v", err)
+			logger.Warn("关闭Request失败\t| %+v", err)
 		}
 	}(response.Body)
 

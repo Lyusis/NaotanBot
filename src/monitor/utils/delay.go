@@ -8,7 +8,6 @@ import (
 )
 
 func Delay(waitingSeed int) {
-
 	if waitingSeed == 0 {
 		waitingSeed = config.Wait
 	}
@@ -16,7 +15,7 @@ func Delay(waitingSeed int) {
 	rateLimiter := time.Tick(
 		time.Duration(waitTime) * time.Second)
 
-	logger.Info("Waiting...\tTime: %d", waitingSeed)
+	logger.Info("Waiting...\t| Time: %d", waitingSeed)
 
 	<-rateLimiter
 }

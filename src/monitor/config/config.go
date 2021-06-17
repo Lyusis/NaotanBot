@@ -14,6 +14,12 @@ var (
 	RoomList = make(map[int]string)
 	// RoomStatusList Map of Room Status
 	RoomStatusList = make(map[int]bool)
+	// SaberchanCode Saberchan's send code
+	SaberchanCode = "SCT45921Tqj6arbImzDYshqstl5siyKf9"
+	// GroupId Id of QQ Group
+	GroupId = "540419281"
+	// CQServer Ip of go-cqhttp Server
+	CQServer = "127.0.0.1"
 )
 
 func init() {
@@ -27,12 +33,9 @@ func init() {
 		kv := strings.Fields(line)
 		id, idErr := strconv.Atoi(kv[0])
 
-		if idErr != nil {
-			logger.Panic("配置失败\t%+v", idErr)
-		} else {
-			RoomList[id] = kv[1]
-		}
-	}
+	// RoomList[6775697] = "海苹果小学校"
+	// RoomList[22470204] = "瑞芙"
+	// RoomList[21672023] = "弥希"
 
 	for index := range RoomList {
 		RoomStatusList[index] = false

@@ -96,7 +96,6 @@ func getLogWriter(filename string) io.Writer {
 	  }
 }
 
-// Debug logs.Debug(...)
 func Debug(format string, v ...interface{}) {
 	logger.Sugar().Debugf(format, v...)
 }

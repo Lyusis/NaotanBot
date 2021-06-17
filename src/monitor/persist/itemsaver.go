@@ -11,7 +11,7 @@ func ItemSaver() chan interface{} {
 		for {
 			item := <-in
 			//log.Info(`Saving #itemCount #item`)
-			logger.Info("Saving... \tNo.%d|\tContext: %+v", itemCount, item)
+			logger.Info("Saving...\t| No.%d\t| Context: %+v", itemCount, item)
 			itemCount++
 		}
 	}()
