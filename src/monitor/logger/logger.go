@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	TimeFormat = "2006-01-02 15:04:05"
+	TimeFormat     = "2006-01-02 15:04:05"
 	TimeFormatDate = "2006-01-02"
 )
 
@@ -69,13 +69,13 @@ func getEncoder() zapcore.Encoder {
 	config := zapcore.EncoderConfig{
 		MessageKey:  "msg",
 		LevelKey:    "level",
-		EncodeLevel: zapcore.CapitalLevelEncoder, 
+		EncodeLevel: zapcore.CapitalLevelEncoder,
 		TimeKey:     "ts",
 		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 			enc.AppendString(t.Format(TimeFormat))
 		},
-		CallerKey:    "file",
-		EncodeCaller: zapcore.ShortCallerEncoder,
+		CallerKey:      "file",
+		EncodeCaller:   zapcore.ShortCallerEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 	}
 	encoderConfig := zapcore.NewConsoleEncoder(config)
@@ -88,30 +88,50 @@ func getEncoder() zapcore.Encoder {
  */
 func getLogWriter(filename string) io.Writer {
 	return &lumberjack.Logger{
-		Filename: `./logs/`+filename+"." + time.Now().Format(TimeFormatDate) +".log",
-		MaxSize: 10,
-		MaxBackups:5,
-		MaxAge: 30,
-		Compress: true, 
-	  }
+		Filename:   `./logs/` + filename + "." + time.Now().Format(TimeFormatDate) + ".log",
+		MaxSize:    10,
+		MaxBackups: 5,
+		MaxAge:     30,
+		Compress:   true,
+	}
 }
 
-func Debug(format string, v ...interface{}) {
-	logger.Sugar().Debugf(format, v...)
+func formatLogger(format string, isPairInfo bool, v ...interface{}) string {
+	length := len(v)
+	format += "\n"
+	if isPairInfo {
+		for i := 0; i < length; i++ {
+			if i%2 == 0 {
+				format += "\t| %s: "
+			} else {
+				format += "%+v"
+			}
+		}
+	} else {
+		for i := 0; i < length; i++ {
+			format += "\t| %+v"
+		}
+	}
+
+	return format
 }
 
-func Info(format string, v ...interface{}) {
-	logger.Sugar().Infof(format, v...)
+func Debug(message string, isPairInfo bool, v ...interface{}) {
+	logger.Sugar().Debugf(formatLogger(message, isPairInfo, v...), v...)
 }
 
-func Warn(format string, v ...interface{}) {
-	logger.Sugar().Warnf(format, v...)
+func Info(message string, isPairInfo bool, v ...interface{}) {
+	logger.Sugar().Infof(formatLogger(message, isPairInfo, v...), v...)
 }
 
-func Error(format string, v ...interface{}) {
-	logger.Sugar().Errorf(format, v...)
+func Warn(message string, isPairInfo bool, v ...interface{}) {
+	logger.Sugar().Warnf(formatLogger(message, isPairInfo, v...), v...)
 }
 
-func Panic(format string, v ...interface{}) {
-	logger.Sugar().Panicf(format, v...)
+func Error(message string, isPairInfo bool, v ...interface{}) {
+	logger.Sugar().Errorf(formatLogger(message, isPairInfo, v...), v...)
+}
+
+func Panic(message string, isPairInfo bool, v ...interface{}) {
+	logger.Sugar().Panicf(formatLogger(message, isPairInfo, v...), v...)
 }

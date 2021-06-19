@@ -1,9 +1,9 @@
 package engine
 
 import (
+	"api"
+	"config"
 	"fmt"
-	"monitor/api"
-	"monitor/config"
 	"monitor/model"
 )
 
@@ -35,7 +35,7 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 					fmt.Println("直播中")
 					if !config.RoomStatusList[liveData.RoomId] {
 						api.SendBarkMessage(name, "开播啦!")
-						api.SendQQGroupMessage(config.GroupId, name + "开播啦!")
+						api.SendQQGroupMessage(config.GroupId, name+"开播啦!")
 					}
 					setRoomStatusTrue(liveData.RoomId)
 				case 2:

@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"config"
 	"math/rand"
-	"monitor/config"
 	"monitor/logger"
 	"time"
 )
@@ -15,7 +15,7 @@ func Delay(waitingSeed int) {
 	rateLimiter := time.Tick(
 		time.Duration(waitTime) * time.Second)
 
-	logger.Info("Waiting...\t| Time: %d", waitingSeed)
+	logger.Info("Waiting", true, "Time", waitingSeed)
 
 	<-rateLimiter
 }

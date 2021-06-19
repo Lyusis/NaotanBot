@@ -1,0 +1,15 @@
+liver:
+  - room_id: 6775697
+    nickname: "水姐"
+  - room_id: 22470204
+    nickname: "瑞芙"
+  - room_id: 21672023
+    nickname: "弥希"
+
+waiting: 10
+
+saberchanCode: "SCT45921Tqj6arbImzDYshqstl5siyKf9"
+
+group_id: "540419281"
+
+cq_server: "127.0.0.1:9000"

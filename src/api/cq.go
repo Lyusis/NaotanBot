@@ -1,7 +1,7 @@
 package api
 
 import (
-	"monitor/config"
+	"config"
 	"net/http"
 )
 

@@ -1,13 +1,13 @@
 package main
 
 import (
+	"config"
 	"monitor/bilibili/live"
-	"monitor/config"
 	"monitor/engine"
 	"monitor/persist"
 	"monitor/scheduler"
-	"monitor/utils"
 	"strconv"
+	"utils"
 )
 
 var (
