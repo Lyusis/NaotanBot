@@ -69,7 +69,7 @@ func NewServer(addr string) {
 	}
 }
 
-func handlerFunc(h http.ResponseWriter, r *http.Request) {
+func handlerFunc(_ http.ResponseWriter, r *http.Request) {
 
 	message := MetaEventMessage{}
 	pMessage := MessageMessage{}
