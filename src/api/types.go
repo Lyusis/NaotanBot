@@ -1,10 +1,4 @@
-package server
-
-import (
-	"api"
-	"monitor/logger"
-	"net/http"
-)
+package api
 
 type PostType struct {
 	PostType string `json:"post_type"`
@@ -52,21 +46,4 @@ type MetaEventMessage struct {
 		} `json:"stat"`
 	} `json:"status"`
 	Time int `json:"time"`
-}
-
-func NewServer(addr string) {
-	http.HandleFunc("/", handlerFunc)
-
-	logger.Info("启动服务器", true, "IP地址", addr, "端口", "9000")
-
-	addr += ":9000"
-
-	serverErr := http.ListenAndServe(addr, nil)
-	if serverErr != nil {
-		logger.Error("监听启动失败", false, serverErr)
-	}
-}
-
-func handlerFunc(_ http.ResponseWriter, r *http.Request) {
-	api.CQHandler(r)
 }

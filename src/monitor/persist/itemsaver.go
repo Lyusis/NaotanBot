@@ -14,7 +14,7 @@ func ItemSaver() chan interface{} {
 			item := <-in
 			//log.Info(`Saving #itemCount #item`)
 			logger.Info("Saving", false, item)
-			save(item)
+			//save(item)
 		}
 	}()
 	return in

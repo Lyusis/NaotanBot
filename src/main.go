@@ -6,6 +6,7 @@ import (
 	"monitor/engine"
 	"monitor/persist"
 	"monitor/scheduler"
+	"server"
 	"strconv"
 	"utils"
 )
@@ -15,6 +16,8 @@ var (
 )
 
 func main() {
+
+	go func() { server.NewServer(config.CQServer) }()
 
 	e := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
