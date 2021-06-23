@@ -30,7 +30,7 @@ func GetFetcher(url string) ([]byte, error) {
 	}(response.Body)
 
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("woring status code: %d", response.StatusCode)
+		return nil, fmt.Errorf("请求失败, 错误代码: %d", response.StatusCode)
 	}
 
 	return ioutil.ReadAll(response.Body)

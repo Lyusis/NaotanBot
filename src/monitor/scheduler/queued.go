@@ -1,6 +1,10 @@
 package scheduler
 
-import "monitor/engine"
+import (
+	"api"
+	"monitor/engine"
+	"monitor/logger"
+)
 
 type QueuedScheduler struct {
 	requestChan chan engine.Request
@@ -43,6 +47,9 @@ func (s *QueuedScheduler) Run() {
 			case activeWorker <- activeRequest:
 				workerQ = workerQ[1:]
 				requestQ = requestQ[1:]
+			default:
+				logger.Error("调度器队列处理异常", false)
+				api.SendBarkMessage("异常报告", "调度器队列异常, 请重启")
 			}
 		}
 	}()
