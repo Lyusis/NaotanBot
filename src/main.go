@@ -2,6 +2,7 @@ package main
 
 import (
 	"config"
+	"fmt"
 	"monitor/bilibili/live"
 	"monitor/engine"
 	"monitor/persist"
@@ -17,7 +18,10 @@ var (
 
 func main() {
 
-	go func() { server.NewServer(config.CQServer) }()
+	fmt.Println("CQ监听服务启动中")	
+	go func() { 
+		server.NewServer(config.CQServer) 
+	}()
 
 	e := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
@@ -26,8 +30,9 @@ func main() {
 		RequestProcessor: engine.Worker,
 	}
 
+	fmt.Println("推送服务启动中")	
 	for {
-		utils.Delay(0)
+		utils.Delay(config.Wait)
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
 			e.Run(engine.Request{

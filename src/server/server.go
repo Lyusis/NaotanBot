@@ -57,13 +57,13 @@ type MetaEventMessage struct {
 func NewServer(addr string) {
 	http.HandleFunc("/", handlerFunc)
 
-	logger.Info("启动服务器", true, "IP地址", addr, "端口", "9000")
+	logger.Sugar.Info("启动监听服务器", logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9000)
 
 	addr += ":9000"
 
 	serverErr := http.ListenAndServe(addr, nil)
 	if serverErr != nil {
-		logger.Error("监听启动失败", false, serverErr)
+		logger.Sugar.Error("监听启动失败", logger.FormatTitle("WRONG"), serverErr)
 	}
 }
 

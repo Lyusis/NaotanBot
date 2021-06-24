@@ -17,14 +17,14 @@ func GetFetcher(url string) ([]byte, error) {
 
 	response, responseError := client.Get(url)
 	if responseError != nil {
-		logger.Error("未响应请求或响应失败, 将在下次轮询中再次请求", false, responseError)
+		logger.Sugar.Warn("未响应请求或响应失败, 将在下次轮询中再次请求", logger.FormatTitle("WRONG"), responseError)
 		return nil, responseError
 	}
 
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Warn("关闭Request失败", false, err)
+			logger.Sugar.Warn("关闭Request失败", logger.FormatTitle("WRONG"), err)
 		}
 	}(response.Body)
 

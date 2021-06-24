@@ -10,13 +10,13 @@ import (
 func Worker(request Request) (Result, error) {
 
 	if request.Name != "" {
-		logger.Info("Fetching", true, "URL", request.Url, "Name", request.Name)
+		logger.Sugar.Info("Fetching", logger.FormatTitle("URL"), request.Url, logger.FormatTitle("Name"), request.Name)
 	} else {
-		logger.Info("Fetching", true, "URL", request.Url)
+		logger.Sugar.Info("Fetching", logger.FormatTitle("URL"), request.Url)
 	}
 	body, bodyErr := fetcher.GetFetcher(request.Url)
 	if bodyErr != nil {
-		logger.Error("获取请求体失败", false, bodyErr)
+		logger.Sugar.Error("获取请求体失败", bodyErr)
 		logger.WriteFile("写入失败的请求体",
 			time.Now().Format(logger.TimeFormatDate)+"_fail-request-body"+string(rune(rand.Intn(19960730)))+".log", body)
 		return NilResult(), bodyErr

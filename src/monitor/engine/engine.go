@@ -3,7 +3,6 @@ package engine
 import (
 	"api"
 	"config"
-	"fmt"
 	"monitor/model"
 )
 
@@ -14,7 +13,7 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	engine.Scheduler.Run()
 
 	for i := 0; i < engine.WorkerCount; i++ {
-		engine.createWorker(engine.Scheduler.WorkerChan(), out, engine.Scheduler)
+		engine.createWorker(out, engine.Scheduler)
 	}
 
 	for _, request := range seeds {
@@ -26,20 +25,16 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 		go func(item interface{}) {
 			if liveData, ok := item.(model.LiveData); ok {
 				name := config.RoomList[liveData.RoomId]
-				fmt.Print(name + ": ")
 				switch liveData.LiveStatus {
 				case 0:
-					fmt.Println("尚未直播")
 					setRoomStatusFalse(liveData.RoomId)
 				case 1:
-					fmt.Println("直播中")
 					if !config.RoomStatusList[liveData.RoomId] {
 						api.SendBarkMessage(name, "开播啦!")
 						api.SendQQGroupMessage(config.GroupId, name+"开播啦!")
 					}
 					setRoomStatusTrue(liveData.RoomId)
 				case 2:
-					fmt.Println("轮播中")
 					setRoomStatusFalse(liveData.RoomId)
 				}
 			}
@@ -47,6 +42,24 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 			engine.ItemChan <- item
 		}(item)
 	}
+}
+
+// createWorker Worker创建/**
+func (engine *ConcurrentEngine) createWorker(
+	out chan Result, ready Scheduler) {
+	go func() {
+		// FIXME: 协程未关闭
+		// for {
+			in := ready.WorkerChan()
+			ready.WorkerReady(in)
+			request := <-in
+			result, err := engine.RequestProcessor(request)
+			if err == nil {
+				// continue
+				out <- result
+			}
+		// }
+	}()
 }
 
 func setRoomStatusFalse(roomId int) {

@@ -24,7 +24,7 @@ type Information struct {
 func VLGParsing(filename string) {
 	vlgFile, err := os.Open(filename)
 	if err != nil {
-		logger.Error("无法读取 virtual liver gachi 配置文件", false, err)
+		logger.Sugar.Error("无法读取 virtual liver gachi 配置文件", logger.FormatTitle("WRONG"), err)
 	}
 
 	lineCount := -1
@@ -79,7 +79,7 @@ func VLGParsing(filename string) {
 
 	//  完全没有冒号，说明该配置文件错误
 	if -1 == lastColon {
-		logger.Error("无法解析 virtual liver gachi 配置文件", false, err)
+		logger.Sugar.Error("无法解析 virtual liver gachi 配置文件", logger.FormatTitle("WRONG"), err)
 	}
 }
 
