@@ -14,24 +14,24 @@ func CQHandler(r *http.Request) {
 	postType := PostType{}
 	readAll, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Warn("信息发送返回json读取失败", false, err)
+		logger.Sugar.Warn("信息发送返回json读取失败", logger.FormatTitle("WRONG"), err)
 	}
 	checkErr := json.Unmarshal(readAll, &postType)
 	if checkErr != nil {
-		logger.Warn("信息发送返回json解析失败", false, checkErr)
+		logger.Sugar.Warn("信息发送返回json解析失败", logger.FormatTitle("WRONG"), checkErr)
 	}
 
 	switch postType.PostType {
 	case "meta_event":
 		jsonErr := json.Unmarshal(readAll, &eventMessage)
 		if jsonErr != nil {
-			logger.Warn("cq请求上报返回json解析失败", false, jsonErr)
+			logger.Sugar.Warn("cq请求上报返回json解析失败", logger.FormatTitle("WRONG"), jsonErr)
 		}
 		//fmt.Printf("%+v\n", message)
 	case "message":
 		jsonErr := json.Unmarshal(readAll, &message)
 		if jsonErr != nil {
-			logger.Warn("cq消息上报返回json解析失败", false, jsonErr)
+			logger.Sugar.Warn("cq消息上报返回json解析失败", logger.FormatTitle("WRONG"), jsonErr)
 		}
 		SendQQGroupMsgObserveTarget(config.GroupId, "阿骏不要再舔了", 1565255741, message.UserId)
 	}
@@ -40,10 +40,10 @@ func CQHandler(r *http.Request) {
 func SendQQGroupMessage(groupId string, message string) {
 	client := &http.Client{}
 	url := "http://" + config.CQServer + ":5700/send_group_msg?group_id=" + groupId + "&message=" + message + "&access_token=" + "guanrenchi"
-	logger.Info("发送Q群消息", true, "URL", url)
+	logger.Sugar.Info("发送Q群消息", logger.FormatTitle("URL"), url)
 	request, requestErr := http.NewRequest("GET", url, nil)
 	if requestErr != nil {
-		logger.Warn("发送消息失败", false, requestErr)
+		logger.Sugar.Warn("发送消息失败", logger.FormatTitle("WRONG"), requestErr)
 		return
 	}
 	//request.Header.Add("AccessToken", "guanrenchi")

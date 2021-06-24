@@ -16,6 +16,7 @@ const (
 var (
 	logger *zap.Logger
 	level  string
+	Sugar  *zap.SugaredLogger
 )
 
 // InitLogger 初始化日志 /**
@@ -59,6 +60,7 @@ func init() {
 	)
 
 	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel))
+	Sugar = logger.Sugar()
 }
 
 /**
@@ -96,42 +98,7 @@ func getLogWriter(filename string) io.Writer {
 	}
 }
 
-func formatLogger(format string, isPairInfo bool, v ...interface{}) string {
-	length := len(v)
-	format += "\n"
-	if isPairInfo {
-		for i := 0; i < length; i++ {
-			if i%2 == 0 {
-				format += "\t| %s: "
-			} else {
-				format += "%+v"
-			}
-		}
-	} else {
-		for i := 0; i < length; i++ {
-			format += "\t| %+v"
-		}
-	}
-
+func FormatTitle(title string) string {
+	format := "\t| " + title + ": "  
 	return format
-}
-
-func Debug(message string, isPairInfo bool, v ...interface{}) {
-	logger.Sugar().Debugf(formatLogger(message, isPairInfo, v...), v...)
-}
-
-func Info(message string, isPairInfo bool, v ...interface{}) {
-	logger.Sugar().Infof(formatLogger(message, isPairInfo, v...), v...)
-}
-
-func Warn(message string, isPairInfo bool, v ...interface{}) {
-	logger.Sugar().Warnf(formatLogger(message, isPairInfo, v...), v...)
-}
-
-func Error(message string, isPairInfo bool, v ...interface{}) {
-	logger.Sugar().Errorf(formatLogger(message, isPairInfo, v...), v...)
-}
-
-func Panic(message string, isPairInfo bool, v ...interface{}) {
-	logger.Sugar().Panicf(formatLogger(message, isPairInfo, v...), v...)
 }

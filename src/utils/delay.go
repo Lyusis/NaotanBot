@@ -15,7 +15,7 @@ func Delay(waitingSeed int) {
 	rateLimiter := time.Tick(
 		time.Duration(waitTime) * time.Second)
 
-	logger.Info("Waiting", true, "Time", waitingSeed)
+	logger.Sugar.Info("Waiting", logger.FormatTitle("Time"), waitingSeed)
 
 	<-rateLimiter
 }

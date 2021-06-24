@@ -9,6 +9,6 @@ import (
 func SendBarkMessage(title, desp string) {
 	url := "https://sctapi.ftqq.com/" + config.SaberchanCode + ".send?title=" + title + "&desp=" + desp
 	header := "application/json;charset=UTF-8"
-	logger.Info("发送Bark消息", true, "URL", url)
+	logger.Sugar.Info("发送Bark消息", logger.FormatTitle("URL"), url)
 	BasicReceiver(http.Post(url, header, nil))
 }

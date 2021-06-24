@@ -7,7 +7,7 @@ import (
 
 func Worker(request Request) (Result, error) {
 
-	logger.Info("Fetching", true, "URL", request.Url, "Name", request.Name)
+	logger.Sugar.Info("Fetching", logger.FormatTitle("URL"), request.Url, logger.FormatTitle("Name"), request.Name)
 	body, bodyErr := fetcher.GetFetcher(request.Url)
 	if bodyErr != nil {
 		return Result{}, bodyErr
