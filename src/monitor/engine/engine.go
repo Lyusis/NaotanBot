@@ -3,7 +3,6 @@ package engine
 import (
 	"api"
 	"config"
-	"fmt"
 	"monitor/model"
 )
 
@@ -26,20 +25,16 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 		go func(item interface{}) {
 			if liveData, ok := item.(model.LiveData); ok {
 				name := config.RoomList[liveData.RoomId]
-				fmt.Print(name + ": ")
 				switch liveData.LiveStatus {
 				case 0:
-					fmt.Println("尚未直播")
 					setRoomStatusFalse(liveData.RoomId)
 				case 1:
-					fmt.Println("直播中")
 					if !config.RoomStatusList[liveData.RoomId] {
 						api.SendBarkMessage(name, "开播啦!")
 						api.SendQQGroupMessage(config.GroupId, name+"开播啦!")
 					}
 					setRoomStatusTrue(liveData.RoomId)
 				case 2:
-					fmt.Println("轮播中")
 					setRoomStatusFalse(liveData.RoomId)
 				}
 			}
