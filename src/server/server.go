@@ -57,7 +57,7 @@ type MetaEventMessage struct {
 func NewServer(addr string) {
 	http.HandleFunc("/", handlerFunc)
 
-	logger.Sugar.Info("启动服务器", logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9000)
+	logger.Sugar.Info("启动监听服务器", logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9000)
 
 	addr += ":9000"
 

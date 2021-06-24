@@ -32,7 +32,7 @@ func main() {
 
 	fmt.Println("推送服务启动中")	
 	for {
-		utils.Delay(0)
+		utils.Delay(config.Wait)
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
 			e.Run(engine.Request{

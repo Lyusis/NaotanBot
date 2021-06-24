@@ -9,27 +9,8 @@ type ConcurrentEngine struct {
 
 type Processor func(Request) (Result, error)
 
-type ReadyNotifier interface {
-	WorkerReady(chan Request)
-}
-
-func (engine *ConcurrentEngine) createWorker(
-	in chan Request, out chan Result, ready ReadyNotifier) {
-	go func() {
-		for {
-			ready.WorkerReady(in)
-			request := <-in
-			result, err := engine.RequestProcessor(request)
-			if err != nil {
-				continue
-			}
-			out <- result
-		}
-	}()
-}
-
 type Scheduler interface {
-	ReadyNotifier
+	WorkerReady(chan Request)
 	Submit(Request)
 	WorkerChan() chan Request
 	Run()

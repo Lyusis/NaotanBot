@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"config"
 	"math/rand"
 	"monitor/logger"
 	"time"
@@ -9,7 +8,7 @@ import (
 
 func Delay(waitingSeed int) {
 	if waitingSeed == 0 {
-		waitingSeed = config.Wait
+		waitingSeed = 2
 	}
 	waitTime := waitingSeed/2 + rand.Intn(waitingSeed)
 	rateLimiter := time.Tick(
