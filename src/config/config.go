@@ -1,8 +1,6 @@
 package config
 
 var (
-	// Wait Rate limiting seed, Second, default 10s
-	Wait = 10
 	// RoomList Map of LivingRoom
 	RoomList = make(map[int]string)
 	// RoomStatusList Map of Room Status
@@ -13,6 +11,10 @@ var (
 	GroupId = ""
 	// CQServer Ip of go-cqhttp Server
 	CQServer = ""
+	//WorkerCount Count of worker
+	WorkerCount = 2
+	// Wait Rate limiting seed, Second, default 10s
+	Wait = 10
 )
 
 func init() {
@@ -23,6 +25,7 @@ func init() {
 	SaberchanCode = config.SaberchanCode
 	GroupId = config.GroupId
 	CQServer = config.CQServer
+	WorkerCount = config.WorkerCount
 
 	for _, liver := range livers {
 		RoomList[liver.RoomId] = liver.Name

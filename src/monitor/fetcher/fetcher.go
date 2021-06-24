@@ -1,7 +1,6 @@
 package fetcher
 
 import (
-	"config"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +12,7 @@ import (
 func GetFetcher(url string) ([]byte, error) {
 
 	client := http.Client{
-		Timeout: time.Duration(config.Wait/5) * time.Second,
+		Timeout: 3 * time.Second,
 	}
 
 	response, responseError := client.Get(url)

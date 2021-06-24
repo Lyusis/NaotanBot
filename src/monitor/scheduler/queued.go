@@ -1,9 +1,8 @@
 package scheduler
 
 import (
-	"api"
+	"config"
 	"monitor/engine"
-	"monitor/logger"
 )
 
 type QueuedScheduler struct {
@@ -25,8 +24,8 @@ func (s *QueuedScheduler) WorkerReady(
 }
 
 func (s *QueuedScheduler) Run() {
-	s.workerChan = make(chan chan engine.Request)
-	s.requestChan = make(chan engine.Request)
+	s.workerChan = make(chan chan engine.Request, config.WorkerCount*2)
+	s.requestChan = make(chan engine.Request, config.WorkerCount*2)
 	go func() {
 		var requestQ []engine.Request
 		var workerQ []chan engine.Request
@@ -47,9 +46,6 @@ func (s *QueuedScheduler) Run() {
 			case activeWorker <- activeRequest:
 				workerQ = workerQ[1:]
 				requestQ = requestQ[1:]
-			default:
-				logger.Error("调度器队列处理异常", false)
-				api.SendBarkMessage("异常报告", "调度器队列异常, 请重启")
 			}
 		}
 	}()

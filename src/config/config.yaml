@@ -8,6 +8,8 @@ liver:
 
 waiting: 10
 
+worker_count: 5
+
 saberchanCode: "SCT45921Tqj6arbImzDYshqstl5siyKf9"
 
 group_id: "540419281"

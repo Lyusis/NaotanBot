@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
+	"io/ioutil"
 	"time"
 )
 
@@ -134,4 +135,12 @@ func Error(message string, isPairInfo bool, v ...interface{}) {
 
 func Panic(message string, isPairInfo bool, v ...interface{}) {
 	logger.Sugar().Panicf(formatLogger(message, isPairInfo, v...), v...)
+}
+
+func WriteFile(message string, filename string, file []byte) {
+	Info(message, false)
+	err := ioutil.WriteFile("./logs/"+filename+".txt", file, 0666)
+	if err != nil {
+		Error("写入文件失败", false, err)
+	} //写入文件(字节数组)
 }

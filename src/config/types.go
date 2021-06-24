@@ -7,8 +7,9 @@ type Liver struct {
 
 type Livers struct {
 	Items         []Liver `yaml:"liver"`
-	Wait          int     `yaml:"waiting"`
 	GroupId       string  `yaml:"group_id"`
 	SaberchanCode string  `yaml:"saberchanCode"`
 	CQServer      string  `yaml:"cq_server"`
+	WorkerCount   int     `yaml:"worker_count"`
+	Wait          int     `yaml:"waiting"`
 }
