@@ -4,7 +4,7 @@ import (
 	"config"
 	"encoding/json"
 	"io/ioutil"
-	"monitor/logger"
+	"logger"
 	"net/http"
 )
 

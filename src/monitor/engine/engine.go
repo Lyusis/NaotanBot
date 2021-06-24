@@ -1,15 +1,14 @@
 package engine
 
 import (
-	"api"
 	"config"
-	"monitor/model"
+	"logger"
 )
 
 // Run 多线程调度引擎/**
 func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
-	out := make(chan Result)
+	out := make(chan ResultItems, config.WorkerCount)
 	engine.Scheduler.Run()
 
 	for i := 0; i < engine.WorkerCount; i++ {
@@ -17,59 +16,33 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	}
 
 	for _, request := range seeds {
-		engine.Scheduler.Submit(request)
-	}
-
-	result := <-out
-	for _, item := range result.Items {
-		go func(item interface{}) {
-			if liveData, ok := item.(model.LiveData); ok {
-				name := config.RoomList[liveData.RoomId]
-				switch liveData.LiveStatus {
-				case 0:
-					setRoomStatusFalse(liveData.RoomId)
-				case 1:
-					if !config.RoomStatusList[liveData.RoomId] {
-						api.SendBarkMessage(name, "开播啦!")
-						api.SendQQGroupMessage(config.GroupId, name+"开播啦!")
-					}
-					setRoomStatusTrue(liveData.RoomId)
-				case 2:
-					setRoomStatusFalse(liveData.RoomId)
-				}
-			}
+		go func(request Request) {
+			engine.Scheduler.Submit(request)
+			result := <-out
+			items := request.PostParser(result)
 			// TODO: 将数据放入数据库
-			engine.ItemChan <- item
-		}(item)
+			for _, item := range items.Items {
+				engine.SaveChan <- item
+			}
+		}(request)
 	}
 }
 
 // createWorker Worker创建/**
 func (engine *ConcurrentEngine) createWorker(
-	out chan Result, ready Scheduler) {
+	out chan ResultItems, ready Scheduler) {
 	go func() {
+
 		// FIXME: 协程未关闭
-		// for {
-			in := ready.WorkerChan()
-			ready.WorkerReady(in)
-			request := <-in
-			result, err := engine.RequestProcessor(request)
-			if err == nil {
-				// continue
-				out <- result
-			}
-		// }
+		in := ready.WorkerChan()
+		ready.WorkerReady(in)
+		request := <-in
+		result, err := engine.RequestProcessor(request)
+		if err != nil {
+			logger.Sugar.Warn("创建Worker失败", err)
+			return
+		}
+
+		out <- result
 	}()
-}
-
-func setRoomStatusFalse(roomId int) {
-	if config.RoomStatusList[roomId] {
-		config.RoomStatusList[roomId] = false
-	}
-}
-
-func setRoomStatusTrue(roomId int) {
-	if !config.RoomStatusList[roomId] {
-		config.RoomStatusList[roomId] = true
-	}
 }

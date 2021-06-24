@@ -3,7 +3,7 @@ package config
 import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"monitor/logger"
+	"logger"
 )
 
 func YAMLParsing(filename string) Livers {

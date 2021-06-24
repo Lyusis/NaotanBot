@@ -2,7 +2,7 @@ package server
 
 import (
 	"api"
-	"monitor/logger"
+	"logger"
 	"net/http"
 )
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"monitor/logger"
+	"logger"
 	"net/http"
 	"time"
 )

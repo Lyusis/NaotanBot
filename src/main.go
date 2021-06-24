@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api"
 	"config"
 	"fmt"
 	"monitor/bilibili/live"
@@ -18,28 +19,33 @@ var (
 
 func main() {
 
-	fmt.Println("CQ监听服务启动中")	
-	go func() { 
-		server.NewServer(config.CQServer) 
+	api.SendQQGroupMessage(config.GroupId, "重启中")
+
+	fmt.Println("CQ监听服务启动中")
+	go func() {
+		server.NewServer(config.CQServer)
 	}()
 
 	e := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
 		WorkerCount:      10,
-		ItemChan:         persist.ItemSaver(),
+		SaveChan:         persist.ItemSaver(),
 		RequestProcessor: engine.Worker,
 	}
 
-	fmt.Println("推送服务启动中")	
+	fmt.Println("推送服务启动中")
 	for {
 		utils.Delay(config.Wait)
+		requestList := make([]engine.Request, 0)
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
-			e.Run(engine.Request{
-				Url:    url,
-				Name:   name,
-				Parser: live.GetLiveData,
+			requestList = append(requestList, engine.Request{
+				Url:           url,
+				Name:          name,
+				PrimaryParser: live.GetLiveData,
+				PostParser:    live.SendLiveData,
 			})
 		}
+		e.Run(requestList...)
 	}
 }

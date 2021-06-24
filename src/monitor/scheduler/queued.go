@@ -24,8 +24,8 @@ func (s *QueuedScheduler) WorkerReady(
 }
 
 func (s *QueuedScheduler) Run() {
-	s.workerChan = make(chan chan engine.Request, config.WorkerCount*2)
-	s.requestChan = make(chan engine.Request, config.WorkerCount*2)
+	s.workerChan = make(chan chan engine.Request, config.WorkerCount)
+	s.requestChan = make(chan engine.Request, config.WorkerCount)
 	go func() {
 		var requestQ []engine.Request
 		var workerQ []chan engine.Request

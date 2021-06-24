@@ -2,7 +2,7 @@ package api
 
 import (
 	"config"
-	"monitor/logger"
+	"logger"
 	"net/http"
 )
 

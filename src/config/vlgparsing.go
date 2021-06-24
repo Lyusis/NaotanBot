@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"container/list"
-	"monitor/logger"
+	"logger"
 	"os"
 	"strconv"
 	"unicode"

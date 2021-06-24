@@ -4,7 +4,7 @@ import (
 	// "context"
 	// "fmt"
 	// "github.com/olivere/elastic"
-	"monitor/logger"
+	"logger"
 )
 
 func ItemSaver() chan interface{} {
@@ -12,8 +12,7 @@ func ItemSaver() chan interface{} {
 	go func() {
 		for {
 			item := <-in
-			//log.Info(`Saving #itemCount #item`)
-			logger.Sugar.Info("Saving", item)
+			logger.Sugar.Info("Saving", logger.FormatTitle("存储对象"), item)
 			//save(item)
 		}
 	}()

@@ -40,27 +40,31 @@ func init() {
 	default:
 		logLevel = zap.InfoLevel
 	}
-	// 实现两个判断日志等级的interface  可以自定义级别展示
+	// 自定义级别展示
+	debugLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl == zapcore.DebugLevel && lvl >= logLevel
+	})
 	infoLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl < zapcore.WarnLevel && lvl >= logLevel
 	})
-
 	warnLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= zapcore.WarnLevel && lvl >= logLevel
 	})
 
+	writeDebugSyncer := getLogWriter("DEBUG")
 	writeInfoSyncer := getLogWriter("INFO")
 	writeWarnSyncer := getLogWriter("WARN")
 
 	encoder := getEncoder()
 
 	core := zapcore.NewTee(
+		zapcore.NewCore(encoder, zapcore.AddSync(writeDebugSyncer), debugLevel),
 		zapcore.NewCore(encoder, zapcore.AddSync(writeInfoSyncer), infoLevel),
 		zapcore.NewCore(encoder, zapcore.AddSync(writeWarnSyncer), warnLevel),
 		//zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)), logLevel),
 	)
 
-	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.WarnLevel))
+	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.DebugLevel))
 	Sugar = logger.Sugar()
 }
 
@@ -92,7 +96,7 @@ func getEncoder() zapcore.Encoder {
 func getLogWriter(filename string) io.Writer {
 	return &lumberjack.Logger{
 		Filename:   `./logs/` + filename + "." + time.Now().Format(TimeFormatDate) + ".log",
-		MaxSize:    10,
+		MaxSize:    1,
 		MaxBackups: 5,
 		MaxAge:     30,
 		Compress:   true,

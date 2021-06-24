@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"io/ioutil"
-	"monitor/logger"
+	"logger"
 	"net/http"
 )
 

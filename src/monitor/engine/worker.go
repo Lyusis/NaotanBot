@@ -1,13 +1,13 @@
 package engine
 
 import (
+	"logger"
 	"math/rand"
 	"monitor/fetcher"
-	"monitor/logger"
 	"time"
 )
 
-func Worker(request Request) (Result, error) {
+func Worker(request Request) (ResultItems, error) {
 
 	if request.Name != "" {
 		logger.Sugar.Info("Fetching", logger.FormatTitle("URL"), request.Url, logger.FormatTitle("Name"), request.Name)
@@ -22,7 +22,7 @@ func Worker(request Request) (Result, error) {
 		return NilResult(), bodyErr
 	}
 
-	result := request.Parser(body)
+	result := request.PrimaryParser(body)
 
 	return result, nil
 }
