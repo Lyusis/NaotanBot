@@ -17,19 +17,18 @@ type Scheduler interface {
 }
 
 type Request struct {
-	Url           string
-	Name          string
-	PrimaryParser func([]byte) ResultItems
-	PostParser    func(result ResultItems) SaveItems
+	Url    string
+	Name   string
+	Parser func([]byte) ResultItems
 }
 
 type ResultItems struct {
 	Items []interface{}
 }
 
-type SaveItems struct {
-	Items []interface{}
-}
+// type SaveItems struct {
+// 	Items []interface{}
+// }
 
 type ParserFunc func(
 	contents []byte, url string) ResultItems

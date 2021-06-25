@@ -5,7 +5,7 @@ import (
 	"logger"
 )
 
-// Run 多线程调度引擎/**
+// Run 调度引擎/**
 func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
 	out := make(chan ResultItems, config.WorkerCount)
@@ -19,9 +19,8 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 		go func(request Request) {
 			engine.Scheduler.Submit(request)
 			result := <-out
-			items := request.PostParser(result)
 			// TODO: 将数据放入数据库
-			for _, item := range items.Items {
+			for _, item := range result.Items {
 				engine.SaveChan <- item
 			}
 		}(request)

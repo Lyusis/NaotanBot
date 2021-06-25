@@ -22,7 +22,7 @@ func Worker(request Request) (ResultItems, error) {
 		return NilResult(), bodyErr
 	}
 
-	result := request.PrimaryParser(body)
+	result := request.Parser(body)
 
 	return result, nil
 }

@@ -29,6 +29,7 @@ func CQHandler(r *http.Request) {
 		}
 		//fmt.Printf("%+v\n", message)
 	case "message":
+		// TODO: 剥离
 		jsonErr := json.Unmarshal(readAll, &message)
 		if jsonErr != nil {
 			logger.Sugar.Warn(logger.FormatMsg("Server failed to parse JSON message(MESSAGE)"), logger.FormatTitle("WRONG"), jsonErr)
@@ -36,6 +37,8 @@ func CQHandler(r *http.Request) {
 		SendQQGroupMsgObserveTarget(config.GroupId, "阿骏不要再舔了", 1565255741, message.UserId)
 	}
 }
+
+
 
 func SendQQGroupMessage(groupId string, message string) {
 	client := &http.Client{}

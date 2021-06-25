@@ -40,10 +40,9 @@ func main() {
 		for index, name := range config.RoomList {
 			url := baseurl + strconv.Itoa(index)
 			requestList = append(requestList, engine.Request{
-				Url:           url,
-				Name:          name,
-				PrimaryParser: live.GetLiveData,
-				PostParser:    live.SendLiveData,
+				Url:        url,
+				Name:       name,
+				Parser: 	live.ParseLiveData,
 			})
 		}
 		e.Run(requestList...)

@@ -9,6 +9,12 @@ import (
 	"monitor/model"
 )
 
+
+func ParseLiveData(contents []byte) engine.ResultItems {
+	return SendLiveData(GetLiveData(contents))
+}
+
+
 func GetLiveData(contents []byte) engine.ResultItems {
 
 	liveResponse := model.LiveResponse{}
@@ -25,8 +31,8 @@ func GetLiveData(contents []byte) engine.ResultItems {
 	return result
 }
 
-func SendLiveData(result engine.ResultItems) engine.SaveItems {
-	var saveItems engine.SaveItems
+func SendLiveData(result engine.ResultItems) engine.ResultItems {
+	var saveItems engine.ResultItems
 	for i := 0; i < len(result.Items); i++ {
 		if liveData, ok := result.Items[i].(model.LiveData); ok {
 			saveItems.Items = append(saveItems.Items, liveData)
