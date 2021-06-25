@@ -12,7 +12,7 @@ func ItemSaver() chan interface{} {
 	go func() {
 		for {
 			item := <-in
-			logger.Sugar.Info("Saving", logger.FormatTitle("存储对象"), item)
+			logger.Sugar.Info(logger.FormatMsg("Saving"), logger.FormatTitle("Saved Item"), item)
 			//save(item)
 		}
 	}()

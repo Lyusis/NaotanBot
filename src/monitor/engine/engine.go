@@ -39,7 +39,7 @@ func (engine *ConcurrentEngine) createWorker(
 		request := <-in
 		result, err := engine.RequestProcessor(request)
 		if err != nil {
-			logger.Sugar.Warn("创建Worker失败", err)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to create Worker"), err)
 			return
 		}
 

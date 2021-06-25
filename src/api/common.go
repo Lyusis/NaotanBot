@@ -15,31 +15,31 @@ type JsonData struct {
 
 func BasicReceiver(resp *http.Response, err error) {
 	if resp != nil {
-		if resp.StatusCode != 200 {
-			logger.Sugar.Warn("http请求返回信息接收异常", logger.FormatTitle("Code"), resp.StatusCode)
+		if err != nil {
+			logger.Sugar.Warn(logger.FormatMsg("Failed to receive HTTP request"), logger.FormatTitle("WRONG"), err)
 			return
 		}
 
-		if err != nil {
-			logger.Sugar.Warn("http请求返回信息接收失败", logger.FormatTitle("WRONG"), err)
+		if resp.StatusCode != http.StatusOK {
+			logger.Sugar.Warn(logger.FormatMsg("Received HTTP request exception"), logger.FormatTitle("Code"), resp.StatusCode)
 			return
 		}
 
 		jsonAll, jsonErr := ioutil.ReadAll(resp.Body)
 		if jsonErr != nil {
-			logger.Sugar.Warn("信息发送返回json读取失败", logger.FormatTitle("WRONG"), jsonErr)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to read JSON message"), logger.FormatTitle("WRONG"), jsonErr)
 			return
 		}
 
 		jsonData := JsonData{}
 		unmarshalErr := json.Unmarshal(jsonAll, &jsonData)
 		if unmarshalErr != nil {
-			logger.Sugar.Warn("信息发送返回json解析失败", logger.FormatTitle("WRONG"), unmarshalErr)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to parse JSON"), logger.FormatTitle("WRONG"), unmarshalErr)
 			return
 		}
 
 		if jsonData.Code != 0 {
-			logger.Sugar.Warn("发送请求失败", logger.FormatTitle("WRONG"), jsonData.Message)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to send request"), logger.FormatTitle("WRONG"), jsonData.Message)
 			return
 		}
 	}

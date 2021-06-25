@@ -15,7 +15,7 @@ func GetLiveData(contents []byte) engine.ResultItems {
 
 	liveResponseErr := json.Unmarshal(contents, &liveResponse)
 	if liveResponseErr != nil {
-		logger.Sugar.Warn("直播信息json解析错误", logger.FormatTitle("WRONG"), liveResponseErr)
+		logger.Sugar.Warn(logger.FormatMsg("Failed to parsing { Living Room } message"), logger.FormatTitle("WRONG"), liveResponseErr)
 	}
 
 	result := engine.ResultItems{}
