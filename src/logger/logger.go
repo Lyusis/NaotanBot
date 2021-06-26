@@ -95,7 +95,7 @@ func getEncoder() zapcore.Encoder {
  */
 func getLogWriter(filename string) io.Writer {
 	return &lumberjack.Logger{
-		Filename:   `./logs/` + filename + "." + time.Now().Format(TimeFormatDate) + ".log",
+		Filename:   `./logs/` + filename + ".log",
 		MaxSize:    1,
 		MaxBackups: 5,
 		MaxAge:     30,
@@ -112,7 +112,6 @@ func FormatMsg(message string) string {
 	format := "\"" + message + "\""
 	return format
 }
-
 
 func WriteFile(message string, filename string, file []byte) {
 	Sugar.Info(message)

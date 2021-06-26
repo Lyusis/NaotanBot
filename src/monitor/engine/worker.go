@@ -17,7 +17,7 @@ func Worker(request Request) (ResultItems, error) {
 	body, bodyErr := fetcher.GetFetcher(request.Url)
 	if bodyErr != nil {
 		logger.Sugar.Error(logger.FormatMsg("Failed to receive request body"), bodyErr)
-		logger.WriteFile(logger.FormatMsg("Writing failure infomation"),
+		logger.WriteFile(logger.FormatMsg("Writing failure information"),
 			time.Now().Format(logger.TimeFormatDate)+"_fail-request-body"+string(rune(rand.Intn(19960730)))+".log", body)
 		return NilResult(), bodyErr
 	}

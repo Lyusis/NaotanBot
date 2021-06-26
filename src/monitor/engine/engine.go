@@ -27,21 +27,21 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	}
 }
 
-// createWorker Worker创建/**
+// createWorker 创建Worker/**
 func (engine *ConcurrentEngine) createWorker(
 	out chan ResultItems, ready Scheduler) {
+
 	go func() {
-
-		// FIXME: 协程未关闭
-		in := ready.WorkerChan()
-		ready.WorkerReady(in)
-		request := <-in
-		result, err := engine.RequestProcessor(request)
-		if err != nil {
-			logger.Sugar.Warn(logger.FormatMsg("Failed to create Worker"), err)
-			return
+		for {
+			in := ready.WorkerChan()
+			ready.WorkerReady(in)
+			request := <-in
+			result, err := engine.Workers(request)
+			if err != nil {
+				logger.Sugar.Warn(logger.FormatMsg("Failed to create Worker"), err)
+				return
+			}
+			out <- result
 		}
-
-		out <- result
 	}()
 }

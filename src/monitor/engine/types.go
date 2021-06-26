@@ -1,13 +1,11 @@
 package engine
 
 type ConcurrentEngine struct {
-	Scheduler        Scheduler
-	WorkerCount      int
-	SaveChan         chan interface{}
-	RequestProcessor Processor
+	Scheduler   Scheduler
+	WorkerCount int
+	SaveChan    chan interface{}
+	Workers     func(Request) (ResultItems, error)
 }
-
-type Processor func(Request) (ResultItems, error)
 
 type Scheduler interface {
 	WorkerReady(chan Request)
@@ -24,18 +22,6 @@ type Request struct {
 
 type ResultItems struct {
 	Items []interface{}
-}
-
-// type SaveItems struct {
-// 	Items []interface{}
-// }
-
-type ParserFunc func(
-	contents []byte, url string) ResultItems
-
-type FuncParser struct {
-	parser ParserFunc
-	name   string
 }
 
 func NilResult() ResultItems {

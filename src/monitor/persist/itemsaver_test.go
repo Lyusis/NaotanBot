@@ -1,12 +1,13 @@
 package persist
 
 import (
-	"monitor/model"
+	"fmt"
+	"model"
 	"testing"
 )
 
 func TestSave(t *testing.T) {
-	item := model.LiveData{
+	item := model.LiveDataResponseData{
 		RoomId:      21672023,
 		ShortId:     0,
 		Uid:         477317922,
@@ -24,5 +25,5 @@ func TestSave(t *testing.T) {
 		IsSp:        0,
 		SpecialType: 0,
 	}
-	save(item)
+	fmt.Println(item)
 }

@@ -19,7 +19,7 @@ var (
 
 func init() {
 
-	config := YAMLParsing("src/config/config.yaml")
+	config := YAMLParsing("src/config/config.yml")
 	livers := config.Items
 	Wait = config.Wait
 	SaberchanCode = config.SaberchanCode

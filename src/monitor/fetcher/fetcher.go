@@ -17,7 +17,7 @@ func GetFetcher(url string) ([]byte, error) {
 
 	response, responseError := client.Get(url)
 	if responseError != nil {
-		logger.Sugar.Warn(logger.FormatMsg("An unresponded request or a failed response"), logger.FormatTitle("WRONG"), responseError)
+		logger.Sugar.Warn(logger.FormatMsg("A no responded request or a failed response"), logger.FormatTitle("WRONG"), responseError)
 		return nil, responseError
 	}
 
@@ -29,7 +29,7 @@ func GetFetcher(url string) ([]byte, error) {
 	}(response.Body)
 
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Received HTTP request exception, Code: %d", response.StatusCode)
+		return nil, fmt.Errorf("received HTTP request exception, Code: %d", response.StatusCode)
 	}
 
 	return ioutil.ReadAll(response.Body)
