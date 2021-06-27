@@ -1,17 +1,17 @@
 package server
 
 import (
-	"api/cq"
 	"logger"
 	"net/http"
+	"server/cq"
 )
 
-func NewServer(addr string) {
+func NewHttpServer(addr string) {
 	http.HandleFunc("/", handlerFunc)
 
-	logger.Sugar.Info(logger.FormatMsg("Start listening server"), logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9000)
+	logger.Sugar.Info(logger.FormatMsg("Start listening server"), logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9001)
 
-	addr += ":9000"
+	addr += ":9001"
 
 	serverErr := http.ListenAndServe(addr, nil)
 	if serverErr != nil {

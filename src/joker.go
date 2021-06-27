@@ -4,7 +4,7 @@ import (
 	"config"
 	"fmt"
 	"server"
-	"service"
+	"service/bilibili"
 )
 
 func main() {
@@ -13,13 +13,13 @@ func main() {
 
 	fmt.Println("CQ监听服务启动中")
 	go func() {
-		server.NewServer(config.CQServer)
+		server.NewHttpServer(config.CQServer)
 	}()
 
 	fmt.Println("推送服务启动中")
 
 	fmt.Println("启动bilibili 直播通知")
-	service.SendLiveStatusService()
+	bilibili.SendLiveStatusService()
 
 	select {}
 }

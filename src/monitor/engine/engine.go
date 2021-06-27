@@ -14,7 +14,6 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	for i := 0; i < engine.WorkerCount; i++ {
 		engine.createWorker(out, engine.Scheduler)
 	}
-
 	for _, request := range seeds {
 		go func(request Request) {
 			engine.Scheduler.Submit(request)
@@ -30,7 +29,6 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 // createWorker 创建Worker/**
 func (engine *ConcurrentEngine) createWorker(
 	out chan ResultItems, ready Scheduler) {
-
 	go func() {
 		for {
 			in := ready.WorkerChan()

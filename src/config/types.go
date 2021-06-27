@@ -6,10 +6,12 @@ type Liver struct {
 }
 
 type Livers struct {
-	Items         []Liver `yaml:"liver"`
+	Liver         []Liver `yaml:"liver"`
 	GroupId       string  `yaml:"group_id"`
+	QQ            string  `yaml:"qq"`
 	SaberchanCode string  `yaml:"saberchanCode"`
 	CQServer      string  `yaml:"cq_server"`
+	Token         string  `yaml:"token"`
 	WorkerCount   int     `yaml:"worker_count"`
 	Wait          int     `yaml:"waiting"`
 }
