@@ -1,10 +1,11 @@
 package bilibili
 
 import (
-	"monitor/engine"
-	"monitor/fetcher"
 	"reflect"
 	"testing"
+
+	"github.com/Lyusis/NaotanMonitor/monitor/engine"
+	"github.com/Lyusis/NaotanMonitor/monitor/fetcher"
 )
 
 func TestSendLiveUrl(t *testing.T) {

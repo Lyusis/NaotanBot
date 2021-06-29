@@ -1,10 +1,10 @@
 package bilibili
 
 import (
-	"config"
-	"monitor/engine"
-	"monitor/model"
-	"utils"
+	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/monitor/engine"
+	"github.com/Lyusis/NaotanMonitor/monitor/model"
+	"github.com/Lyusis/NaotanMonitor/utils"
 )
 
 // SendLiveStatusService bilibili直播通知

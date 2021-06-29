@@ -3,8 +3,9 @@ package common
 import (
 	"encoding/json"
 	"io/ioutil"
-	"logger"
 	"net/http"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 type JsonData struct {

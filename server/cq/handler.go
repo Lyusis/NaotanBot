@@ -3,8 +3,9 @@ package cq
 import (
 	"encoding/json"
 	"io/ioutil"
-	"logger"
 	"net/http"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 func Handler(r *http.Request) {

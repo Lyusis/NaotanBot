@@ -1,10 +1,11 @@
 package main
 
 import (
-	"config"
 	"fmt"
-	"server"
-	"service/bilibili"
+
+	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/server"
+	"github.com/Lyusis/NaotanMonitor/service/bilibili"
 )
 
 func main() {

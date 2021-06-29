@@ -1,10 +1,11 @@
 package engine
 
 import (
-	"logger"
 	"math/rand"
-	"monitor/fetcher"
 	"time"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanMonitor/monitor/fetcher"
 )
 
 func Worker(request Request) (ResultItems, error) {

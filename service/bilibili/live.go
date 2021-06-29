@@ -1,14 +1,15 @@
 package bilibili
 
 import (
-	"config"
 	"encoding/json"
-	"logger"
-	"monitor/engine"
 	"net/url"
-	"server/cq"
-	"server/saberchan"
-	"utils"
+
+	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanMonitor/monitor/engine"
+	"github.com/Lyusis/NaotanMonitor/server/cq"
+	"github.com/Lyusis/NaotanMonitor/server/saberchan"
+	"github.com/Lyusis/NaotanMonitor/utils"
 )
 
 func SendLiveUrl(contents []byte) engine.ResultItems {

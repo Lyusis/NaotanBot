@@ -1,9 +1,10 @@
 package server
 
 import (
-	"logger"
 	"net/http"
-	"server/cq"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanMonitor/server/cq"
 )
 
 func NewHttpServer(addr string) {

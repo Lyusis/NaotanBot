@@ -2,7 +2,7 @@ package saver
 
 import (
 	"fmt"
-	"service/bilibili"
+	"github.com/Lyusis/NaotanMonitor/service/bilibili"
 	"testing"
 )
 

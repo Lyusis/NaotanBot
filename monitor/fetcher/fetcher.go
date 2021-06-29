@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"logger"
 	"net/http"
 	"time"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 func GetFetcher(url string) ([]byte, error) {

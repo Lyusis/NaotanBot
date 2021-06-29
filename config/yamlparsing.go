@@ -3,7 +3,8 @@ package config
 import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"logger"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 func YAMLParsing(filename string) Livers {

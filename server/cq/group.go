@@ -1,12 +1,13 @@
 package cq
 
 import (
-	"config"
 	"fmt"
-	"logger"
 	"net/http"
-	"server/common"
 	"strings"
+
+	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanMonitor/server/common"
 )
 
 func SendQQGroupMessage(groupId string, message string) {

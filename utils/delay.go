@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"logger"
 	"math/rand"
 	"time"
+
+	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 func Delay(waitingSeed int) {

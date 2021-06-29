@@ -1,8 +1,9 @@
 package bilibili
 
 import (
-	"config"
 	"sync"
+
+	"github.com/Lyusis/NaotanMonitor/config"
 )
 
 type LiveRoom struct {

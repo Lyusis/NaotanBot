@@ -1,7 +1,7 @@
 package cq
 
 import (
-	"config"
+	"github.com/Lyusis/NaotanMonitor/config"
 )
 
 func AJun(message MessageMessage) {
@@ -12,6 +12,6 @@ func At(message MessageMessage) {
 	SendGroupMsgObserveTargetString(config.GroupId, "?", "[CQ:at,qq="+config.QQ+"]", message.Message)
 }
 
-func AutoReturn(message MessageMessage)  {
+func AutoReturn(message MessageMessage) {
 	SendPersonalMessage(message.UserId, "?")
 }

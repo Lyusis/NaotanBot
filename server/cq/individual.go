@@ -1,13 +1,14 @@
 package cq
 
 import (
-	"config"
 	"fmt"
-	"logger"
 	"net/http"
-	"server/common"
 	"strconv"
 	"strings"
+
+	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanMonitor/server/common"
 )
 
 func SendPersonalMessage(userId int, message string) {
