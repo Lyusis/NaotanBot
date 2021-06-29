@@ -33,5 +33,6 @@ func Handler(r *http.Request) {
 		}
 		AJun(message)
 		At(message)
+		AutoReturn(message)
 	}
 }

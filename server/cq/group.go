@@ -25,13 +25,13 @@ func SendQQGroupMessage(groupId string, message string) {
 	common.BasicReceiver(client.Do(request))
 }
 
-func SendQQGroupMsgObserveTarget(groupId string, message string, target, from interface{}) {
+func SendGroupMsgObserveTarget(groupId string, message string, target, from interface{}) {
 	if target == from {
 		SendQQGroupMessage(groupId, message)
 	}
 }
 
-func SendQQGroupMsgObserveTargetString(groupId string, message string, target, from string) {
+func SendGroupMsgObserveTargetString(groupId string, message string, target, from string) {
 	if strings.Contains(target, from) {
 		SendQQGroupMessage(groupId, message)
 	}
