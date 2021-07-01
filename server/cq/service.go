@@ -1,15 +1,15 @@
 package cq
 
 import (
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 )
 
 func AJun(message MessageMessage) {
-	SendGroupMsgObserveTarget(config.GroupId, "阿骏不要再舔了", 1565255741, message.UserId)
+	SendGroupMsgObserveTarget(conf.GroupId, "阿骏不要再舔了", 1565255741, message.UserId)
 }
 
 func At(message MessageMessage) {
-	SendGroupMsgObserveTargetString(config.GroupId, "?", "[CQ:at,qq="+config.QQ+"]", message.Message)
+	SendGroupMsgObserveTargetString(conf.GroupId, "?", "[CQ:at,qq="+conf.QQ+"]", message.Message)
 }
 
 func AutoReturn(message MessageMessage) {

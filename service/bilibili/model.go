@@ -3,7 +3,7 @@ package bilibili
 import (
 	"sync"
 
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 )
 
 type LiveRoom struct {
@@ -20,8 +20,8 @@ var (
 )
 
 func init() {
-	for _, liver := range config.LiverList {
-		room := LiveRoom{RoomId: liver.RoomId, Name: liver.Name, Status: false}
+	for _, liver := range conf.LiverList {
+		room := LiveRoom{RoomId: liver.RoomId, Name: liver.Nickname, Status: false}
 		RoomList = append(RoomList, room)
 	}
 }

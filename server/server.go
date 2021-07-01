@@ -1,11 +1,19 @@
 package server
 
 import (
+	"github.com/Lyusis/NaotanMonitor/conf"
 	"net/http"
 
 	"github.com/Lyusis/NaotanMonitor/logger"
 	"github.com/Lyusis/NaotanMonitor/server/cq"
 )
+
+func CQServer() {
+	addr := conf.CQServer
+	go func() {
+		NewHttpServer(addr)
+	}()
+}
 
 func NewHttpServer(addr string) {
 	http.HandleFunc("/", handlerFunc)

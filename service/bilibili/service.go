@@ -1,7 +1,7 @@
 package bilibili
 
 import (
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/monitor/engine"
 	"github.com/Lyusis/NaotanMonitor/monitor/model"
 	"github.com/Lyusis/NaotanMonitor/utils"
@@ -23,7 +23,7 @@ func SendLiveStatusService() {
 				})
 			}
 			model.ConcurrentEngineWorker.Run(requestList...)
-			utils.Delay(config.Wait)
+			utils.Delay(conf.Waiting)
 		}
 	}()
 }

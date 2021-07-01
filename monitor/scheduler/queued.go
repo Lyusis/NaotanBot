@@ -1,7 +1,7 @@
 package scheduler
 
 import (
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/monitor/engine"
 )
 
@@ -24,8 +24,8 @@ func (s *QueuedScheduler) WorkerReady(
 }
 
 func (s *QueuedScheduler) Run() {
-	s.workerChan = make(chan chan engine.Request, config.WorkerCount)
-	s.requestChan = make(chan engine.Request, config.WorkerCount)
+	s.workerChan = make(chan chan engine.Request, conf.WorkerCount)
+	s.requestChan = make(chan engine.Request, conf.WorkerCount)
 	go func() {
 		var requestQ []engine.Request
 		var workerQ []chan engine.Request

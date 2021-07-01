@@ -11,7 +11,7 @@ import (
 func Worker(request Request) (ResultItems, error) {
 
 	if request.Name != "" {
-		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url, logger.FormatTitle("Name"), request.Name)
+		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url, logger.FormatTitle("NickName"), request.Name)
 	} else {
 		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url)
 	}

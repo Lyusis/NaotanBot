@@ -1,14 +1,14 @@
 package engine
 
 import (
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
 )
 
 // Run 调度引擎/**
 func (engine *ConcurrentEngine) Run(seeds ...Request) {
 
-	out := make(chan ResultItems, config.WorkerCount)
+	out := make(chan ResultItems, conf.WorkerCount)
 	engine.Scheduler.Run()
 
 	for i := 0; i < engine.WorkerCount; i++ {

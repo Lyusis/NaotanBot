@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Lyusis/NaotanMonitor/config"
+	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
 	"github.com/Lyusis/NaotanMonitor/server/common"
 )
 
 func SendQQGroupMessage(groupId string, message string) {
 	client := &http.Client{}
-	urlStr := "http://" + config.CQServer + ":5700/send_group_msg?group_id=" + groupId + "&message=" + message
-	if !strings.EqualFold("", config.Token) {
-		urlStr += "&access_token=" + config.Token
+	urlStr := "http://" + conf.CQServer + ":5700/send_group_msg?group_id=" + groupId + "&message=" + message
+	if !strings.EqualFold("", conf.Token) {
+		urlStr += "&access_token=" + conf.Token
 	}
 	logger.Sugar.Info("发送Q群消息", logger.FormatTitle("URL"), urlStr)
 	fmt.Println(urlStr)
