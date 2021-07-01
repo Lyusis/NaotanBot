@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"github.com/Lyusis/NaotanMonitor/server"
 	"github.com/Lyusis/NaotanMonitor/service/bilibili"
+	"github.com/Lyusis/NaotanMonitor/service/common"
 )
 
 func main() {
 
-	//cq.SendQQGroupMessage(conf.GroupId, "重启中")
+	fmt.Println("更新信息发送至主群")
+	common.SendUpdateMsg()
 
 	fmt.Println("CQ监听服务启动中")
 	server.CQServer()

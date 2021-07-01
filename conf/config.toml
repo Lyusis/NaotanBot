@@ -1,0 +1,16 @@
+announcement = '''
+  The lazy dog.
+  '''
+waiting = 10
+workerCount = 3
+saberchanCode = "SCT45921Tqj6arbImzDYshqstl5siyKf9"
+token = ""
+groupId = "909806523"
+qq = "364551533"
+cqServer = "127.0.0.1"
+
+livers = [
+    { roomId = 6775697, nickname = "水姐" },
+    { roomId = 22470204, nickname = "瑞芙" },
+    { roomId = 21672023, nickname = "弥希" }
+]
