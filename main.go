@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/server"
+	"github.com/Lyusis/NaotanMonitor/sender"
 	"github.com/Lyusis/NaotanMonitor/service/bilibili"
 	"github.com/Lyusis/NaotanMonitor/service/common"
 )
@@ -13,7 +13,7 @@ func main() {
 	common.SendUpdateMsg()
 
 	fmt.Println("CQ监听服务启动中")
-	server.CQServer()
+	sender.CQServer()
 
 	fmt.Println("推送服务启动中")
 

@@ -2,7 +2,7 @@ package common
 
 import (
 	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/server/cq"
+	"github.com/Lyusis/NaotanMonitor/sender/cq"
 	"net/url"
 )
 

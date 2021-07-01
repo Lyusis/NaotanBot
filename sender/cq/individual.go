@@ -8,7 +8,7 @@ import (
 
 	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/server/common"
+	"github.com/Lyusis/NaotanMonitor/sender/common"
 )
 
 func SendPersonalMessage(userId int, message string) {

@@ -7,8 +7,8 @@ import (
 	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
 	"github.com/Lyusis/NaotanMonitor/monitor/engine"
-	"github.com/Lyusis/NaotanMonitor/server/cq"
-	"github.com/Lyusis/NaotanMonitor/server/saberchan"
+	"github.com/Lyusis/NaotanMonitor/sender/cq"
+	"github.com/Lyusis/NaotanMonitor/sender/saberchan"
 	"github.com/Lyusis/NaotanMonitor/utils"
 )
 
