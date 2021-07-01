@@ -16,7 +16,7 @@ func SendLiveUrl(contents []byte) engine.ResultItems {
 	response := LivingUrl{}
 	iveResponseErr := json.Unmarshal(contents, &response)
 	if iveResponseErr != nil {
-		logger.Sugar.Warn(logger.FormatMsg("Failed to parsing { Live Url } message"), logger.FormatTitle("WRONG"), iveResponseErr)
+		logger.Sugar.Warn(logger.FormatMsg("Failed to parsing { Live Url } message"), logger.FormatError(iveResponseErr))
 	}
 	liveUrlData := response.Data
 	var saveItems engine.ResultItems
@@ -42,7 +42,7 @@ func SendLiveStatus(contents []byte) engine.ResultItems {
 	response := LiveDataResponse{}
 	liveResponseErr := json.Unmarshal(contents, &response)
 	if liveResponseErr != nil {
-		logger.Sugar.Warn(logger.FormatMsg("Failed to parsing { Live Status } message"), logger.FormatTitle("WRONG"), liveResponseErr)
+		logger.Sugar.Warn(logger.FormatMsg("Failed to parsing { Live Status } message"), logger.FormatError(liveResponseErr))
 	}
 	liveData := response.Data
 	var saveItems engine.ResultItems

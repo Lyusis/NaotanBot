@@ -1,6 +1,7 @@
 package fetcher
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,20 +13,27 @@ import (
 
 func GetFetcher(url string) ([]byte, error) {
 
-	client := http.Client{
-		Timeout: 3 * time.Second,
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	request, requestErr := http.NewRequest(http.MethodGet, url, nil)
+	if requestErr != nil {
+		logger.Sugar.Warn(logger.FormatMsg("No responded request"), logger.FormatError(requestErr))
+		return nil, requestErr
 	}
 
-	response, responseError := client.Get(url)
-	if responseError != nil {
-		logger.Sugar.Warn(logger.FormatMsg("A no responded request or a failed response"), logger.FormatTitle("WRONG"), responseError)
-		return nil, responseError
-	}
+	request = request.WithContext(ctx)
 
+	response, responseErr := http.DefaultClient.Do(request)
+	if responseErr != nil {
+		logger.Sugar.Warn(logger.FormatMsg("Failed response"), logger.FormatError(responseErr))
+		return nil, responseErr
+	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Sugar.Warn(logger.FormatMsg("Failed to close request"), logger.FormatTitle("WRONG"), err)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to close request"), logger.FormatError(err))
 		}
 	}(response.Body)
 

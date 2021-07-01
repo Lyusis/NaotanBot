@@ -9,7 +9,7 @@ import (
 )
 
 func CQServer() {
-	addr := conf.CQServer
+	addr := conf.CQReceiver.IP + ":" + conf.CQReceiver.Port
 	go func() {
 		NewHttpServer(addr)
 	}()
@@ -24,7 +24,7 @@ func NewHttpServer(addr string) {
 
 	serverErr := http.ListenAndServe(addr, nil)
 	if serverErr != nil {
-		logger.Sugar.Error(logger.FormatMsg("The listening server failed to start"), logger.FormatTitle("WRONG"), serverErr)
+		logger.Sugar.Error(logger.FormatMsg("The listening server failed to start"), logger.FormatError(serverErr))
 	}
 }
 

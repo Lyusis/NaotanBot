@@ -7,10 +7,16 @@ saberchanCode = "SCT45921Tqj6arbImzDYshqstl5siyKf9"
 token = ""
 groupId = "909806523"
 qq = "364551533"
-cqServer = "127.0.0.1"
+cqReceive = {ip = "127.0.0.1", port = "9001"}
+cqSendDest = {ip = "127.0.0.1", port = "9001"}
 
 livers = [
     { roomId = 6775697, nickname = "水姐" },
     { roomId = 22470204, nickname = "瑞芙" },
-    { roomId = 21672023, nickname = "弥希" }
+    { roomId = 21672023, nickname = "弥希" },
+    { roomId = 21613353, nickname = "有加" },
+    { roomId = 22389323, nickname = "清良" },
+    { roomId = 22389314, nickname = "卡奥斯" },
+    { roomId = 22608112, nickname = "希亚娜" },
+    { roomId = 21013446, nickname = "雫るる" },
 ]

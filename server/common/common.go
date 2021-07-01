@@ -2,6 +2,7 @@ package common
 
 import (
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
 
@@ -17,7 +18,7 @@ type JsonData struct {
 func BasicReceiver(resp *http.Response, err error) {
 	if resp != nil {
 		if err != nil {
-			logger.Sugar.Warn(logger.FormatMsg("Failed to receive HTTP request"), logger.FormatTitle("WRONG"), err)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to receive HTTP request"), logger.FormatError(err))
 			return
 		}
 
@@ -27,15 +28,20 @@ func BasicReceiver(resp *http.Response, err error) {
 		}
 
 		jsonAll, jsonErr := ioutil.ReadAll(resp.Body)
+		defer func(Body io.ReadCloser) {
+			if err := Body.Close(); err != nil {
+				logger.Sugar.Panic(logger.FormatMsg("Failed to close response body"), err)
+			}
+		}(resp.Body)
 		if jsonErr != nil {
-			logger.Sugar.Warn(logger.FormatMsg("Failed to read JSON message"), logger.FormatTitle("WRONG"), jsonErr)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to read JSON message"), logger.FormatError(jsonErr))
 			return
 		}
 
 		jsonData := JsonData{}
 		unmarshalErr := json.Unmarshal(jsonAll, &jsonData)
 		if unmarshalErr != nil {
-			logger.Sugar.Warn(logger.FormatMsg("Failed to parse JSON"), logger.FormatTitle("WRONG"), unmarshalErr)
+			logger.Sugar.Warn(logger.FormatMsg("Failed to parse JSON"), logger.FormatError(unmarshalErr))
 			return
 		}
 

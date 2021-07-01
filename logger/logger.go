@@ -113,10 +113,15 @@ func FormatMsg(message string) string {
 	return format
 }
 
+// WriteFile 必要证据写入文件/**
 func WriteFile(message string, filename string, file []byte) {
 	Sugar.Info(message)
 	err := ioutil.WriteFile("./logs/"+filename+".txt", file, 0666)
 	if err != nil {
 		Sugar.Error(FormatMsg("Failed to write file"), FormatTitle("WRONG"), err)
 	} //写入文件(字节数组)
+}
+
+func FormatError(err error) string {
+	return FormatTitle("WRONG") + err.Error()
 }

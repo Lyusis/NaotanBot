@@ -2,7 +2,8 @@ vendor/
 .idea
 .vscode
 config.hjson
-config.yml
+conf/config.yml
+conf/config.toml
 config.toml
 session.token
 device.json

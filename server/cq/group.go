@@ -12,7 +12,7 @@ import (
 
 func SendQQGroupMessage(groupId string, message string) {
 	client := &http.Client{}
-	urlStr := "http://" + conf.CQServer + ":5700/send_group_msg?group_id=" + groupId + "&message=" + message
+	urlStr := "http://" + conf.CQSendDest.IP + ":" + conf.CQSendDest.Port + "/send_group_msg?group_id=" + groupId + "&message=" + message
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token
 	}
@@ -20,7 +20,7 @@ func SendQQGroupMessage(groupId string, message string) {
 	fmt.Println(urlStr)
 	request, requestErr := http.NewRequest("GET", urlStr, nil)
 	if requestErr != nil {
-		logger.Sugar.Warn("发送消息失败", logger.FormatTitle("WRONG"), requestErr)
+		logger.Sugar.Warn("发送消息失败", logger.FormatError(requestErr))
 		return
 	}
 	common.BasicReceiver(client.Do(request))
