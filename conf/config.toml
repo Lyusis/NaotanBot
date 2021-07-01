@@ -3,12 +3,12 @@ announcement = '''
   '''
 waiting = 10
 workerCount = 3
-saberchanCode = "SCT45921Tqj6arbImzDYshqstl5siyKf9"
+saberchanCode = ""
 token = ""
-groupId = "909806523"
-qq = "364551533"
+groupId = ""
+qq = ""
 cqReceive = {ip = "127.0.0.1", port = "9001"}
-cqSendDest = {ip = "127.0.0.1", port = "9001"}
+cqSendDest = {ip = "127.0.0.1", port = "5700"}
 
 livers = [
     { roomId = 6775697, nickname = "水姐" },
