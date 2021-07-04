@@ -2,13 +2,15 @@ package cq
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"net/http"
-
+	"fmt"
 	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/gorilla/websocket"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
-func Handler(r *http.Request) {
+func HttpHandler(_ http.ResponseWriter, r *http.Request) {
 	eventMessage := MetaEventMessage{}
 	message := MessageMessage{}
 	postType := PostType{}
@@ -35,5 +37,81 @@ func Handler(r *http.Request) {
 		AJun(message)
 		At(message)
 		AutoReturn(message)
+	}
+}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:    4096,
+	WriteBufferSize:   4096,
+	EnableCompression: true,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func WSHandler(w http.ResponseWriter, r *http.Request) {
+
+	conn, connErr := upgrader.Upgrade(w, r, nil)
+	if connErr != nil {
+		log.Println("Upgrade:", connErr)
+		return
+	}
+
+	go func() {
+		for {
+			// 读取客户端的消息
+			_, msg, readMessageErr := conn.ReadMessage()
+			if readMessageErr != nil {
+				return
+			}
+
+			fmt.Printf("Event: %+v\n", r.RemoteAddr)
+			// 把消息打印到标准输出
+			fmt.Printf("%s sent event: %s\n", conn.RemoteAddr(), string(msg))
+		}
+	}()
+}
+
+func ApiHandler(w http.ResponseWriter, r *http.Request) {
+
+	conn, connErr := upgrader.Upgrade(w, r, nil)
+	if connErr != nil {
+		log.Println("Upgrade:", connErr)
+		return
+	}
+
+	SendTest(conn)
+
+	go func() {
+		for {
+			// 读取客户端的消息
+			_, msg, readMessageErr := conn.ReadMessage()
+			if readMessageErr != nil {
+				fmt.Printf("%s sent api: %s\n", conn.RemoteAddr(), string(msg))
+				return
+			}
+
+			// 把消息打印到标准输出
+
+			fmt.Printf("API: %+v\n", r.RemoteAddr)
+		}
+	}()
+
+}
+
+func SendTest(conn *websocket.Conn) {
+	test1 := IndividualMessage{
+		Action: "send_private_msg",
+	}
+	test1.Params.Message = "muamua"
+	test1.Params.UserId = 506642268
+	marshal, err := json.Marshal(test1)
+	if err != nil {
+		return
+	}
+	err = conn.WriteMessage(websocket.TextMessage, marshal)
+	if err != nil {
+		log.Println("write:", err)
+		return
 	}
 }

@@ -47,3 +47,12 @@ type MetaEventMessage struct {
 	Interval      int    `json:"interval"`
 	Time          int    `json:"time"`
 }
+
+type IndividualMessage struct {
+	Action string `json:"action"`
+	Params struct {
+		UserId  int    `json:"user_id"`
+		Message string `json:"message"`
+	} `json:"params"`
+	Echo string `json:"echo"`
+}

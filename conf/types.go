@@ -7,7 +7,7 @@ type Liver struct {
 
 type Addr struct {
 	IP   string
-	Port string
+	Port int
 }
 
 type Configuration struct {

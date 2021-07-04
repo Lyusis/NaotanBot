@@ -3,7 +3,6 @@ package cq
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/Lyusis/NaotanMonitor/conf"
@@ -11,9 +10,9 @@ import (
 	"github.com/Lyusis/NaotanMonitor/sender/common"
 )
 
-func SendPersonalMessage(userId int, message string) {
+func SendPersonalMessage(userId string, message string) {
 	client := &http.Client{}
-	urlStr := "http://" + conf.CQSendDest.IP + ":" + conf.CQSendDest.Port + "/send_private_msg?user_id=" + strconv.Itoa(userId) + "&message=" + message
+	urlStr := fmt.Sprintf("http://%s:%d/send_private_msg?user_id=%s&message=%s", conf.CQSendDest.IP, conf.CQSendDest.Port, userId, message)
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token
 	}

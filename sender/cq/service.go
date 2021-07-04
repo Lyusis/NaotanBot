@@ -2,6 +2,8 @@ package cq
 
 import (
 	"github.com/Lyusis/NaotanMonitor/conf"
+	"strconv"
+	"strings"
 )
 
 func AJun(message MessageMessage) {
@@ -13,5 +15,7 @@ func At(message MessageMessage) {
 }
 
 func AutoReturn(message MessageMessage) {
-	SendPersonalMessage(message.UserId, "?")
+	if strings.EqualFold(message.MessageType, "private") {
+		SendPersonalMessage(strconv.Itoa(message.UserId), "?")
+	}
 }

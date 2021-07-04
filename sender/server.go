@@ -1,33 +1,40 @@
 package sender
 
 import (
+	"fmt"
 	"github.com/Lyusis/NaotanMonitor/conf"
+	"github.com/Lyusis/NaotanMonitor/sender/cq"
 	"net/http"
 
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/sender/cq"
 )
 
-func CQServer() {
-	addr := conf.CQReceiver.IP + ":" + conf.CQReceiver.Port
-	go func() {
-		NewHttpServer(addr)
-	}()
+func HttpCQServer() {
+	NewServer(func(w http.ResponseWriter, r *http.Request) {
+		cq.HttpHandler(w, r)
+	})
 }
 
-func NewHttpServer(addr string) {
-	http.HandleFunc("/", handlerFunc)
-
-	logger.Sugar.Info(logger.FormatMsg("Start listening sender"), logger.FormatTitle("IP地址"), addr, logger.FormatTitle("端口"), 9001)
-
-	addr += ":9001"
-
-	serverErr := http.ListenAndServe(addr, nil)
-	if serverErr != nil {
-		logger.Sugar.Error(logger.FormatMsg("The listening sender failed to start"), logger.FormatError(serverErr))
-	}
+func WSCQServer() {
+	NewServer(func(w http.ResponseWriter, r *http.Request) {
+		cq.WSHandler(w, r)
+	})
 }
 
-func handlerFunc(_ http.ResponseWriter, r *http.Request) {
-	cq.Handler(r)
+func NewServer(_ func(http.ResponseWriter, *http.Request)) {
+
+	addr := fmt.Sprintf("%s:%d", conf.CQReceiver.IP, conf.CQReceiver.Port)
+
+	//http.HandleFunc("/", handlerFunc)
+	http.HandleFunc("/api", cq.ApiHandler)
+	http.HandleFunc("/event", cq.WSHandler)
+	go func(addr string) {
+		serverErr := http.ListenAndServe(addr, nil)
+		if serverErr != nil {
+			logger.Sugar.Warn(logger.FormatMsg("The listening sender failed to start"), logger.FormatError(serverErr))
+			return
+		}
+	}(addr)
+	logger.Sugar.Info(logger.FormatMsg("Start listening sender"), logger.FormatTitle("IP地址"), conf.CQSendDest.IP, logger.FormatTitle("端口"), conf.CQSendDest.Port)
+
 }

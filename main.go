@@ -13,7 +13,8 @@ func main() {
 	common.SendUpdateMsg()
 
 	fmt.Println("CQ监听服务启动中")
-	sender.CQServer()
+	//sender.HttpCQServer()
+	sender.WSCQServer()
 
 	fmt.Println("推送服务启动中")
 

@@ -12,7 +12,7 @@ import (
 
 func SendQQGroupMessage(groupId string, message string) {
 	client := &http.Client{}
-	urlStr := "http://" + conf.CQSendDest.IP + ":" + conf.CQSendDest.Port + "/send_group_msg?group_id=" + groupId + "&message=" + message
+	urlStr := fmt.Sprintf("http://%s:%d/send_group_msg?group_id=%s&message=%s", conf.CQSendDest.IP, conf.CQSendDest.Port, groupId, message)
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token
 	}

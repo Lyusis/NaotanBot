@@ -28,35 +28,38 @@ func init() {
 
 func WriteRoomStatusList(roomId int, status bool) {
 	mu.Lock()
+	defer mu.Unlock()
+
 	for i := 0; i < len(RoomList); i++ {
 		if RoomList[i].RoomId == roomId {
 			roomP := &RoomList[i]
 			roomP.Status = status
 		}
 	}
-	mu.Unlock()
 }
 
 func GetRoomStatus(roomId int) bool {
-	status := false
 	mu.RLock()
+	defer mu.RUnlock()
+
+	status := false
 	for _, room := range RoomList {
 		if room.RoomId == roomId {
 			status = room.Status
 		}
 	}
-	mu.RUnlock()
 	return status
 }
 
 func GetRoomName(roomId int) string {
-	name := ""
 	mu.RLock()
+	defer mu.RUnlock()
+
+	name := ""
 	for _, room := range RoomList {
 		if room.RoomId == roomId {
 			name = room.Name
 		}
 	}
-	mu.RUnlock()
 	return name
 }
