@@ -17,5 +17,7 @@ var ConcurrentEngineWorker = engine.ConcurrentEngine{
 }
 
 func init() {
-	ConcurrentEngineWorker.Run()
+	go func() {
+		ConcurrentEngineWorker.Run()
+	}()
 }
