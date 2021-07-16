@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func GetFetcher(url string) ([]byte, error) {

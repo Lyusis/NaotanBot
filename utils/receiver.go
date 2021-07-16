@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 type JsonData struct {

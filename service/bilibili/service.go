@@ -1,10 +1,10 @@
 package bilibili
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
-	"github.com/Lyusis/NaotanMonitor/scheduler/model"
-	"github.com/Lyusis/NaotanMonitor/utils"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/scheduler/engine"
+	"github.com/Lyusis/NaotanBot/scheduler/model"
+	"github.com/Lyusis/NaotanBot/utils"
 )
 
 // SendLiveStatusService bilibili直播通知

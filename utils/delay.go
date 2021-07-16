@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func Delay(waitingSeed int) {

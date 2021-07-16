@@ -1,8 +1,8 @@
 package queued
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/scheduler/engine"
 )
 
 type Scheduler struct {

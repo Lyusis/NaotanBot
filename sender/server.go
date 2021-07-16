@@ -2,11 +2,11 @@ package sender
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/conf"
-	cq2 "github.com/Lyusis/NaotanMonitor/service/cq"
+	"github.com/Lyusis/NaotanBot/conf"
+	cq2 "github.com/Lyusis/NaotanBot/service/cq"
 	"net/http"
 
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func HttpCQServer() {

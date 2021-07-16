@@ -3,7 +3,7 @@ package cq
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/gorilla/websocket"
 	"io/ioutil"
 	"log"

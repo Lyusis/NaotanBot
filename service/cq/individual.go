@@ -2,12 +2,12 @@ package cq
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/utils"
+	"github.com/Lyusis/NaotanBot/utils"
 	"net/http"
 	"strings"
 
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func SendPersonalMessage(userId string, message string) {

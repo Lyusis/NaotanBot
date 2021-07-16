@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/service/cq"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/service/cq"
 	"net/url"
 )
 

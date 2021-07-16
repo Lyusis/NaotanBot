@@ -1,7 +1,7 @@
 package cq
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
+	"github.com/Lyusis/NaotanBot/conf"
 	"strconv"
 	"strings"
 )

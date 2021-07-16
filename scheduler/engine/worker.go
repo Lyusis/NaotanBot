@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/scheduler/fetcher"
+	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/scheduler/fetcher"
 )
 
 func Worker(request Request) (ResultItems, error) {

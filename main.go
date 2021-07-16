@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/sender"
-	"github.com/Lyusis/NaotanMonitor/service/bilibili"
-	"github.com/Lyusis/NaotanMonitor/service/common"
+	"github.com/Lyusis/NaotanBot/sender"
+	"github.com/Lyusis/NaotanBot/service/bilibili"
+	"github.com/Lyusis/NaotanBot/service/common"
 )
 
 func main() {

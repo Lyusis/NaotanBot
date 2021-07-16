@@ -1,8 +1,8 @@
 package engine
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 // Run 调度引擎/**

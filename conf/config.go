@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )

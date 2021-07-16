@@ -4,7 +4,7 @@ import (
 	// "context"
 	// "fmt"
 	// "github.com/olivere/elastic"
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func ItemSaver() chan interface{} {

@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
-	"github.com/Lyusis/NaotanMonitor/scheduler/queued"
-	"github.com/Lyusis/NaotanMonitor/scheduler/saver"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/scheduler/engine"
+	"github.com/Lyusis/NaotanBot/scheduler/queued"
+	"github.com/Lyusis/NaotanBot/scheduler/saver"
 )
 
 // ConcurrentEngineWorker 快捷模板

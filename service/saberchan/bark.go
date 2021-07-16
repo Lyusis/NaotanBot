@@ -2,11 +2,11 @@ package saberchan
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanMonitor/utils"
+	"github.com/Lyusis/NaotanBot/utils"
 	"net/http"
 
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/logger"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func SendBarkMessage(title, desp string) {

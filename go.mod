@@ -1,4 +1,4 @@
-module github.com/Lyusis/NaotanMonitor
+module github.com/Lyusis/NaotanBot
 
 go 1.16
 

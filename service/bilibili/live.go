@@ -2,14 +2,14 @@ package bilibili
 
 import (
 	"encoding/json"
-	cq2 "github.com/Lyusis/NaotanMonitor/service/cq"
-	saberchan2 "github.com/Lyusis/NaotanMonitor/service/saberchan"
+	cq2 "github.com/Lyusis/NaotanBot/service/cq"
+	saberchan2 "github.com/Lyusis/NaotanBot/service/saberchan"
 	"net/url"
 
-	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
-	"github.com/Lyusis/NaotanMonitor/utils"
+	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/scheduler/engine"
+	"github.com/Lyusis/NaotanBot/utils"
 )
 
 func SendLiveUrl(contents []byte) engine.ResultItems {

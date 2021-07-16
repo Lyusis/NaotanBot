@@ -3,7 +3,7 @@ package bilibili
 import (
 	"sync"
 
-	"github.com/Lyusis/NaotanMonitor/conf"
+	"github.com/Lyusis/NaotanBot/conf"
 )
 
 type LiveRoom struct {
