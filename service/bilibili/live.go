@@ -2,13 +2,13 @@ package bilibili
 
 import (
 	"encoding/json"
+	cq2 "github.com/Lyusis/NaotanMonitor/service/cq"
+	saberchan2 "github.com/Lyusis/NaotanMonitor/service/saberchan"
 	"net/url"
 
 	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/monitor/engine"
-	"github.com/Lyusis/NaotanMonitor/sender/cq"
-	"github.com/Lyusis/NaotanMonitor/sender/saberchan"
+	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
 	"github.com/Lyusis/NaotanMonitor/utils"
 )
 
@@ -32,7 +32,7 @@ func SendLiveUrl(contents []byte) engine.ResultItems {
 			extra := info.Extra
 			baseurl := codec.BaseUrl
 			urlStr := `potplayer://` + host + url.QueryEscape(baseurl+extra)
-			cq.SendQQGroupMessage(conf.GroupId, urlStr)
+			cq2.SendQQGroupMessage(conf.GroupId, urlStr)
 		}
 	}
 	return saveItems
@@ -54,8 +54,8 @@ func SendLiveStatus(contents []byte) engine.ResultItems {
 	case 1:
 		if !GetRoomStatus(liveData.RoomId) {
 			name := GetRoomName(liveData.RoomId)
-			saberchan.SendBarkMessage(name, "开播啦!")
-			cq.SendQQGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦!+地址:https://live.bilibili.com/", liveData.RoomId))
+			saberchan2.SendBarkMessage(name, "开播啦!")
+			cq2.SendQQGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦!+地址:https://live.bilibili.com/", liveData.RoomId))
 			//utils.Delay(2)
 			SendLiveUrlService(liveData.RoomId)
 		}

@@ -4,6 +4,7 @@ type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
 	SaveChan    chan interface{}
+	RequestChan chan Request
 	Workers     func(Request) (ResultItems, error)
 }
 

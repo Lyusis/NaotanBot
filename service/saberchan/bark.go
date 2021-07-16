@@ -2,11 +2,11 @@ package saberchan
 
 import (
 	"fmt"
+	"github.com/Lyusis/NaotanMonitor/utils"
 	"net/http"
 
 	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/sender/common"
 )
 
 func SendBarkMessage(title, desp string) {
@@ -14,5 +14,5 @@ func SendBarkMessage(title, desp string) {
 	fmt.Println(urlStr)
 	header := "application/json;charset=UTF-8"
 	logger.Sugar.Info(logger.FormatMsg("Sending BARK messages"), logger.FormatTitle("URL"), urlStr)
-	common.BasicReceiver(http.Post(urlStr, header, nil))
+	utils.BasicReceiver(http.Post(urlStr, header, nil))
 }

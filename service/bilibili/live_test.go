@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Lyusis/NaotanMonitor/monitor/engine"
-	"github.com/Lyusis/NaotanMonitor/monitor/fetcher"
+	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
+	"github.com/Lyusis/NaotanMonitor/scheduler/fetcher"
 )
 
 func TestSendLiveUrl(t *testing.T) {

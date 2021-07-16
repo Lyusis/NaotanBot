@@ -6,7 +6,7 @@ import (
 )
 
 // Run 调度引擎/**
-func (engine *ConcurrentEngine) Run(seeds ...Request) {
+func (engine *ConcurrentEngine) Run() {
 
 	out := make(chan ResultItems, conf.WorkerCount)
 	engine.Scheduler.Run()
@@ -14,16 +14,31 @@ func (engine *ConcurrentEngine) Run(seeds ...Request) {
 	for i := 0; i < engine.WorkerCount; i++ {
 		engine.createWorker(out, engine.Scheduler)
 	}
-	for _, request := range seeds {
-		go func(request Request) {
-			engine.Scheduler.Submit(request)
-			result := <-out
-			// TODO: 将数据放入数据库
-			for _, item := range result.Items {
-				engine.SaveChan <- item
-			}
-		}(request)
+
+	for {
+		select {
+		case request := <-engine.RequestChan:
+			go func(request Request) {
+				engine.Scheduler.Submit(request)
+				result := <-out
+				// TODO: 将数据放入数据库
+				for _, item := range result.Items {
+					engine.SaveChan <- item
+				}
+			}(request)
+		}
 	}
+
+	//for _, request := range seeds {
+	//	go func(request Request) {
+	//		engine.Scheduler.Submit(request)
+	//		result := <-out
+	//		// TODO: 将数据放入数据库
+	//		for _, item := range result.Items {
+	//			engine.SaveChan <- item
+	//		}
+	//	}(request)
+	//}
 }
 
 // createWorker 创建Worker/**

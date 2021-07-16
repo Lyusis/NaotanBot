@@ -1,29 +1,29 @@
-package scheduler
+package queued
 
 import (
 	"github.com/Lyusis/NaotanMonitor/conf"
-	"github.com/Lyusis/NaotanMonitor/monitor/engine"
+	"github.com/Lyusis/NaotanMonitor/scheduler/engine"
 )
 
-type QueuedScheduler struct {
+type Scheduler struct {
 	requestChan chan engine.Request
 	workerChan  chan chan engine.Request
 }
 
-func (s *QueuedScheduler) WorkerChan() chan engine.Request {
+func (s *Scheduler) WorkerChan() chan engine.Request {
 	return make(chan engine.Request)
 }
 
-func (s *QueuedScheduler) Submit(r engine.Request) {
+func (s *Scheduler) Submit(r engine.Request) {
 	s.requestChan <- r
 }
 
-func (s *QueuedScheduler) WorkerReady(
+func (s *Scheduler) WorkerReady(
 	w chan engine.Request) {
 	s.workerChan <- w
 }
 
-func (s *QueuedScheduler) Run() {
+func (s *Scheduler) Run() {
 	s.workerChan = make(chan chan engine.Request, conf.WorkerCount)
 	s.requestChan = make(chan engine.Request, conf.WorkerCount)
 	go func() {

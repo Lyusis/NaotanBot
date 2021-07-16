@@ -2,12 +2,12 @@ package cq
 
 import (
 	"fmt"
+	"github.com/Lyusis/NaotanMonitor/utils"
 	"net/http"
 	"strings"
 
 	"github.com/Lyusis/NaotanMonitor/conf"
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/sender/common"
 )
 
 func SendQQGroupMessage(groupId string, message string) {
@@ -23,7 +23,7 @@ func SendQQGroupMessage(groupId string, message string) {
 		logger.Sugar.Warn("发送消息失败", logger.FormatError(requestErr))
 		return
 	}
-	common.BasicReceiver(client.Do(request))
+	utils.BasicReceiver(client.Do(request))
 }
 
 func SendGroupMsgObserveTarget(groupId string, message string, target, from interface{}) {

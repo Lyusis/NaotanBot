@@ -1,4 +1,4 @@
-package common
+package utils
 
 import (
 	"encoding/json"
@@ -29,8 +29,8 @@ func BasicReceiver(resp *http.Response, err error) {
 
 		jsonAll, jsonErr := ioutil.ReadAll(resp.Body)
 		defer func(Body io.ReadCloser) {
-			if err := Body.Close(); err != nil {
-				logger.Sugar.Panic(logger.FormatMsg("Failed to close response body"), err)
+			if bodyCloseErr := Body.Close(); bodyCloseErr != nil {
+				logger.Sugar.Panic(logger.FormatMsg("Failed to close response body"), bodyCloseErr)
 			}
 		}(resp.Body)
 		if jsonErr != nil {

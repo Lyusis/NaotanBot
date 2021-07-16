@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/Lyusis/NaotanMonitor/logger"
-	"github.com/Lyusis/NaotanMonitor/monitor/fetcher"
+	"github.com/Lyusis/NaotanMonitor/scheduler/fetcher"
 )
 
 func Worker(request Request) (ResultItems, error) {
