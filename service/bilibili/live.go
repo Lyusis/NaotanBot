@@ -2,7 +2,7 @@ package bilibili
 
 import (
 	"encoding/json"
-	"github.com/Lyusis/NaotanBot/service/cq/model"
+	"github.com/Lyusis/NaotanBot/server"
 	"net/url"
 
 	"github.com/Lyusis/NaotanBot/conf"
@@ -32,7 +32,7 @@ func SendLiveUrl(contents []byte) engine.ResultItems {
 			extra := info.Extra
 			baseurl := codec.BaseUrl
 			urlStr := `potplayer://` + host + url.QueryEscape(baseurl+extra)
-			model.SendTool.SendMessage.SendGroupMessage(conf.GroupId, urlStr)
+			server.SendTool.SendGroupMessage(conf.GroupId, urlStr)
 		}
 	}
 	return saveItems
@@ -55,7 +55,7 @@ func SendLiveStatus(contents []byte) engine.ResultItems {
 		if !GetRoomStatus(liveData.RoomId) {
 			name := GetRoomName(liveData.RoomId)
 			saberchan.SendBarkMessage(name, "开播啦!")
-			model.SendTool.SendMessage.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦!+地址:https://live.bilibili.com/", liveData.RoomId))
+			server.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦!+地址:https://live.bilibili.com/", liveData.RoomId))
 			SendLiveUrlService(liveData.RoomId)
 		}
 		WriteRoomStatusList(liveData.RoomId, true)

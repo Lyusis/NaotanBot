@@ -6,16 +6,21 @@ import (
 
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/service/cq"
 	"github.com/Lyusis/NaotanBot/service/cq/httpserver"
 	"github.com/Lyusis/NaotanBot/service/cq/wsserver"
 )
 
+var SendTool = cq.Sender{}
+
 func HttpCQServer() {
+	SendTool = httpserver.SendTool
 	http.HandleFunc("/", httpserver.Handler)
 	NewServer()
 }
 
 func WSCQServer() {
+	SendTool = wsserver.SendTool
 	http.HandleFunc("/api", wsserver.WSApiHandler)
 	http.HandleFunc("/event", wsserver.WSEventHandler)
 	NewServer()

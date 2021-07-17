@@ -11,6 +11,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+var SendTool = cq.Sender{
+	SendMessage: &WSSender{},
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:    4096,
 	WriteBufferSize:   4096,
@@ -28,12 +32,35 @@ func WSEventHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go func(conn *websocket.Conn) {
+		eventMessage := cq.MetaEventMessage{}
+		message := cq.MessageMessage{}
+		postType := cq.PostType{}
 		for {
 			// 读取客户端的消息
 			_, msg, readMessageErr := conn.ReadMessage()
 			if readMessageErr != nil {
-				logger.Sugar.Warn(logger.FormatMsg("WebSocket cannot read message"), logger.FormatError(readMessageErr), logger.FormatMsg(string(msg)))
+				logger.Sugar.Warn(logger.FormatMsg("WebSocket cannot read message"), logger.FormatError(readMessageErr))
 				return
+			}
+			checkErr := json.Unmarshal(msg, &postType)
+			if checkErr != nil {
+				logger.Sugar.Warn("Server failed to parse JSON message(TYPE)", logger.FormatError(checkErr))
+			}
+
+			switch postType.PostType {
+			case "meta_event":
+				jsonErr := json.Unmarshal(msg, &eventMessage)
+				if jsonErr != nil {
+					logger.Sugar.Warn(logger.FormatMsg("Server failed to parse JSON message(META_EVENT)"), logger.FormatError(jsonErr))
+				}
+			case "message":
+				jsonErr := json.Unmarshal(msg, &message)
+				if jsonErr != nil {
+					logger.Sugar.Warn(logger.FormatMsg("Server failed to parse JSON message(MESSAGE)"), logger.FormatError(jsonErr))
+				}
+				SendTool.AJun(message)
+				SendTool.At(message)
+				SendTool.AutoReturn(message)
 			}
 		}
 	}(conn)

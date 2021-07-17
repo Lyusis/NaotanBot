@@ -1,10 +1,6 @@
 package bilibili
 
 import (
-	"fmt"
-	"runtime"
-	"strconv"
-
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
 	"github.com/Lyusis/NaotanBot/scheduler/model"
@@ -26,7 +22,6 @@ func SendLiveStatusService() {
 				}
 			}
 			utils.Delay(conf.Waiting)
-			fmt.Println("goroutine count : " + strconv.Itoa(runtime.NumGoroutine()))
 		}
 	}()
 }

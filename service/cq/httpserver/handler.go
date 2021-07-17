@@ -2,12 +2,16 @@ package httpserver
 
 import (
 	"encoding/json"
-	"github.com/Lyusis/NaotanBot/logger"
-	"github.com/Lyusis/NaotanBot/service/cq"
-	"github.com/Lyusis/NaotanBot/service/cq/model"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/service/cq"
 )
+
+var SendTool = cq.Sender{
+	SendMessage: &HttpSender{},
+}
 
 func Handler(_ http.ResponseWriter, r *http.Request) {
 	eventMessage := cq.MetaEventMessage{}
@@ -33,8 +37,8 @@ func Handler(_ http.ResponseWriter, r *http.Request) {
 		if jsonErr != nil {
 			logger.Sugar.Warn(logger.FormatMsg("Server failed to parse JSON message(MESSAGE)"), logger.FormatError(jsonErr))
 		}
-		model.SendTool.AJun(message)
-		model.SendTool.At(message)
-		model.SendTool.AutoReturn(message)
+		SendTool.AJun(message)
+		SendTool.At(message)
+		SendTool.AutoReturn(message)
 	}
 }
