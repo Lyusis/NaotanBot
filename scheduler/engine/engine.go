@@ -28,17 +28,6 @@ func (engine *ConcurrentEngine) Run() {
 			}(request)
 		}
 	}
-
-	//for _, request := range seeds {
-	//	go func(request Request) {
-	//		engine.Scheduler.Submit(request)
-	//		result := <-out
-	//		// TODO: 将数据放入数据库
-	//		for _, item := range result.Items {
-	//			engine.SaveChan <- item
-	//		}
-	//	}(request)
-	//}
 }
 
 // createWorker 创建Worker/**

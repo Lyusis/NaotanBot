@@ -48,7 +48,7 @@ func init() {
 
 	viper.WatchConfig()
 	watch := func(e fsnotify.Event) {
-		logger.Sugar.Info(logger.FormatMsg("Config file is changed: %s \n"), e.String())
+		logger.Sugar.Info(logger.FormatMsg("Config file is changed:"), e.String())
 		SetConf()
 	}
 	viper.OnConfigChange(watch)

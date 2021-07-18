@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/Lyusis/NaotanBot/server"
 
 	"github.com/Lyusis/NaotanBot/service/basic"
-	"github.com/Lyusis/NaotanBot/service/bilibili"
+	biliServer "github.com/Lyusis/NaotanBot/service/bilibili/server"
+	cqServer "github.com/Lyusis/NaotanBot/service/cq/server"
 )
 
 func main() {
 	fmt.Println("CQ监听服务启动中")
-	server.WSCQServer()
+	cqServer.WSCQServer()
 
 	fmt.Println("更新信息发送至主群")
 	basic.SendUpdateMsg()
@@ -18,7 +18,7 @@ func main() {
 	fmt.Println("推送服务启动中")
 
 	fmt.Println("启动bilibili 直播通知")
-	bilibili.SendLiveStatusService()
+	biliServer.SendLiveStatusService()
 
 	select {}
 }
