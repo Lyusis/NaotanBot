@@ -19,7 +19,6 @@ func (sender *HttpSender) SendGroupMessage(groupId string, message string) {
 		urlStr += "&access_token=" + conf.Token
 	}
 	logger.Sugar.Info("发送Q群消息", logger.FormatTitle("URL"), urlStr)
-	fmt.Println(urlStr)
 	request, requestErr := http.NewRequest("GET", urlStr, nil)
 	if requestErr != nil {
 		logger.Sugar.Warn("发送消息失败", logger.FormatError(requestErr))
@@ -34,7 +33,6 @@ func (sender *HttpSender) SendPrivateMessage(userId string, message string) {
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token
 	}
-	fmt.Println(urlStr)
 	logger.Sugar.Info("发送私聊消息", logger.FormatTitle("URL"), urlStr)
 	request, requestErr := http.NewRequest("GET", urlStr, nil)
 	if requestErr != nil {

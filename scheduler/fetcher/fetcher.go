@@ -8,13 +8,15 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
 )
 
 func GetFetcher(url string) ([]byte, error) {
 
 	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	// TODO: 超时时间可配置化
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(conf.Waiting)*time.Second)
 	defer cancel()
 
 	request, requestErr := http.NewRequest(http.MethodGet, url, nil)

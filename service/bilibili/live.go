@@ -2,17 +2,17 @@ package bilibili
 
 import (
 	"encoding/json"
-	server2 "github.com/Lyusis/NaotanBot/service/cq/server"
 	"net/url"
 
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
+	cqServer "github.com/Lyusis/NaotanBot/service/cq/server"
 	"github.com/Lyusis/NaotanBot/service/saberchan"
 	"github.com/Lyusis/NaotanBot/utils"
 )
 
-func SendLiveUrl(contents []byte) engine.ResultItems {
+func sendLiveUrl(contents []byte) engine.ResultItems {
 	response := LivingUrl{}
 	iveResponseErr := json.Unmarshal(contents, &response)
 	if iveResponseErr != nil {
@@ -20,7 +20,7 @@ func SendLiveUrl(contents []byte) engine.ResultItems {
 	}
 	liveUrlData := response.Data
 	var saveItems engine.ResultItems
-	if !GetRoomStatus(liveUrlData.PlayurlInfo.Playurl.Cid) {
+	if !getRoomStatus(liveUrlData.PlayurlInfo.Playurl.Cid) {
 		return saveItems
 	}
 
@@ -32,13 +32,13 @@ func SendLiveUrl(contents []byte) engine.ResultItems {
 			extra := info.Extra
 			baseurl := codec.BaseUrl
 			urlStr := `potplayer://` + host + url.QueryEscape(baseurl+extra)
-			server2.SendTool.SendGroupMessage(conf.GroupId, urlStr)
+			cqServer.SendTool.SendGroupMessage(conf.GroupId, urlStr)
 		}
 	}
 	return saveItems
 }
 
-func SendLiveStatus(contents []byte) engine.ResultItems {
+func sendLiveStatus(contents []byte) engine.ResultItems {
 	response := LiveDataResponse{}
 	liveResponseErr := json.Unmarshal(contents, &response)
 	if liveResponseErr != nil {
@@ -50,15 +50,15 @@ func SendLiveStatus(contents []byte) engine.ResultItems {
 	saveItems.Items = append(saveItems.Items, liveData)
 	switch liveData.LiveStatus {
 	case 0, 2:
-		WriteRoomStatusList(liveData.RoomId, false)
+		writeRoomStatusList(liveData.RoomId, false)
 	case 1:
-		if !GetRoomStatus(liveData.RoomId) {
-			name := GetRoomName(liveData.RoomId)
+		if !getRoomStatus(liveData.RoomId) {
+			name := getRoomName(liveData.RoomId)
 			saberchan.SendBarkMessage(name, "开播啦!")
-			server2.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦!+地址:https://live.bilibili.com/", liveData.RoomId))
+			cqServer.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦! 地址:https://live.bilibili.com/", liveData.RoomId))
 			SendLiveUrlService(liveData.RoomId)
+			writeRoomStatusList(liveData.RoomId, true)
 		}
-		WriteRoomStatusList(liveData.RoomId, true)
 	}
 	return saveItems
 }

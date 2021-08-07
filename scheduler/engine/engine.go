@@ -2,7 +2,7 @@ package engine
 
 import (
 	"github.com/Lyusis/NaotanBot/conf"
-	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/utils"
 )
 
 // Run 调度引擎/**
@@ -23,7 +23,12 @@ func (engine *ConcurrentEngine) Run() {
 				result := <-out
 				// TODO: 将数据放入数据库
 				for _, item := range result.Items {
-					engine.SaveChan <- item
+					if item != DelayOp {
+						engine.SaveChan <- item
+					} else {
+						// Magic Count
+						conf.Waiting = utils.LongDelay
+					}
 				}
 			}(request)
 		}
@@ -38,12 +43,7 @@ func (engine *ConcurrentEngine) createWorker(
 			in := ready.WorkerChan()
 			ready.WorkerReady(in)
 			request := <-in
-			result, err := engine.Workers(request)
-			if err != nil {
-				logger.Sugar.Warn(logger.FormatMsg("Failed to create Worker"), err)
-				return
-			}
-			out <- result
+			go engine.Workers(request, out)
 		}
 	}()
 }

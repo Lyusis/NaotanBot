@@ -3,7 +3,7 @@ package bilibili
 import (
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
-	"github.com/Lyusis/NaotanBot/scheduler/model"
+	"github.com/Lyusis/NaotanBot/scheduler/instance"
 	"github.com/Lyusis/NaotanBot/utils"
 )
 
@@ -13,15 +13,19 @@ func SendLiveStatusService() {
 	go func() {
 		for {
 			// 获取直播状态
+			if conf.ReLoad {
+				conf.CheckedReload()
+				reloadRoomList()
+			}
+			<-utils.Delay(conf.Waiting)
 			for _, room := range RoomList {
-				url := utils.SingleBack(baseurl, room.RoomId)
-				model.ConcurrentEngineWorker.RequestChan <- engine.Request{
+				url := utils.SingleBack(baseurl, room.Liver.RoomId)
+				instance.ConcurrentEngineWorker.RequestChan <- engine.Request{
 					Url:    url,
-					Name:   room.Name,
-					Parser: SendLiveStatus,
+					Name:   room.Liver.Nickname,
+					Parser: sendLiveStatus,
 				}
 			}
-			utils.Delay(conf.Waiting)
 		}
 	}()
 }
@@ -32,10 +36,10 @@ func SendLiveUrlService(roomId int) {
 	const baseurl1 = "&no_playurl=0&mask=1&qn=10000&platform=web&protocol=0,1&format=0,2&codec=0,1"
 	go func() {
 		// 获取直播链接
-		model.ConcurrentEngineWorker.RequestChan <- engine.Request{
+		instance.ConcurrentEngineWorker.RequestChan <- engine.Request{
 			Url:    utils.Double(baseurl0, baseurl1, roomId),
-			Name:   GetRoomName(roomId),
-			Parser: SendLiveUrl,
+			Name:   getRoomName(roomId),
+			Parser: sendLiveUrl,
 		}
 	}()
 }

@@ -38,7 +38,5 @@ func Handler(_ http.ResponseWriter, r *http.Request) {
 			logger.Sugar.Warn(logger.FormatMsg("Server failed to parse JSON message(MESSAGE)"), logger.FormatError(jsonErr))
 		}
 		SendTool.AJun(message)
-		SendTool.At(message)
-		SendTool.AutoReturn(message)
 	}
 }

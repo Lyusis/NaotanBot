@@ -2,9 +2,15 @@ package basic
 
 import (
 	"github.com/Lyusis/NaotanBot/conf"
-	server2 "github.com/Lyusis/NaotanBot/service/cq/server"
+	"github.com/Lyusis/NaotanBot/service/cq/server"
 )
 
 func SendUpdateMsg() {
-	server2.SendTool.SendGroupMessage(conf.GroupId, conf.Announcement)
+	if "" != conf.Announcement {
+		server.SendTool.SendGroupMessage(conf.GroupId, conf.Announcement)
+	}
+}
+
+func SendQuitMsg() {
+	server.SendTool.SendGroupMessage(conf.GroupId, conf.QuitMessage)
 }
