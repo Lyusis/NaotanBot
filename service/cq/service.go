@@ -67,14 +67,12 @@ func (cqSender *Sender) DeleteVup(msgMessage MessageMessage) {
 	}
 }
 
-// UpdateVup 更新Vup订阅
-func (cqSender *Sender) UpdateVup(msgMessage MessageMessage) {
-
-}
-
 // SelectVup 查询Vup订阅
 func (cqSender *Sender) SelectVup(msgMessage MessageMessage) {
-
+	if msgMessage.isAt() {
+		if msgMessage.isMsgHave("查询") {
+		}
+	}
 }
 
 // AJun 当阿骏说话时
