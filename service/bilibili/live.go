@@ -7,7 +7,7 @@ import (
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
-	cqServer "github.com/Lyusis/NaotanBot/service/cq/server"
+	"github.com/Lyusis/NaotanBot/service/cq"
 	"github.com/Lyusis/NaotanBot/service/saberchan"
 	"github.com/Lyusis/NaotanBot/utils"
 )
@@ -32,7 +32,7 @@ func sendLiveUrl(contents []byte) engine.ResultItems {
 			extra := info.Extra
 			baseurl := codec.BaseUrl
 			urlStr := `potplayer://` + host + url.QueryEscape(baseurl+extra)
-			cqServer.SendTool.SendGroupMessage(conf.GroupId, urlStr)
+			cq.SendTool.SendGroupMessage(conf.GroupId, urlStr)
 		}
 	}
 	return saveItems
@@ -55,7 +55,7 @@ func sendLiveStatus(contents []byte) engine.ResultItems {
 		if !getRoomStatus(liveData.RoomId) {
 			name := getRoomName(liveData.RoomId)
 			saberchan.SendBarkMessage(name, "开播啦!")
-			cqServer.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦! 地址:https://live.bilibili.com/", liveData.RoomId))
+			cq.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦! 地址:https://live.bilibili.com/", liveData.RoomId))
 			SendLiveUrlService(liveData.RoomId)
 			writeRoomStatusList(liveData.RoomId, true)
 		}

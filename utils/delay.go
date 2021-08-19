@@ -23,6 +23,7 @@ func Delay(waitingSeed int) <-chan time.Time {
 	logger.Sugar.Debug(logger.FormatMsg("Waiting"), logger.FormatTitle("Time"), waitTime)
 
 	if waitingSeed == LongDelay {
+		logger.Sugar.Debug(logger.FormatMsg("Long Waiting Over"), logger.FormatTitle("Time"), LongDelay)
 		conf.SetConf()
 	}
 

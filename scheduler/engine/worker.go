@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/Lyusis/NaotanBot/logger"
@@ -16,13 +17,15 @@ func Worker(request Request, resultItemsChan chan ResultItems) {
 	}
 	body, bodyErr := fetcher.GetFetcher(request.Url)
 	if bodyErr != nil {
-		logger.Sugar.Error(logger.FormatMsg("Failed to receive request body"), bodyErr)
+		logger.Sugar.Warn(logger.FormatMsg("Failed to receive request body"), bodyErr)
 		errStr := bodyErr.Error()
-		if code := strings.Split(errStr, "Code: "); len(code) > 0 {
-			if "412" == code[1] {
+		// TODO 重新设计处理方案, 封装给server
+		if code := strings.Split(errStr, "Code: "); len(code) > 1 {
+			if string(rune(http.StatusOK)) != code[1] {
 				strList := make([]interface{}, 0)
 				strList = append(strList, DelayOp)
 				resultItemsChan <- ResultItems{Items: strList}
+				//basic.SendDelayMsg()
 			} else {
 				resultItemsChan <- NilResult()
 			}

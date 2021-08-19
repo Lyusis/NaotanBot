@@ -1,9 +1,13 @@
 package bilibili
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
 	"github.com/Lyusis/NaotanBot/scheduler/instance"
+	"github.com/Lyusis/NaotanBot/service/cq"
 	"github.com/Lyusis/NaotanBot/utils"
 )
 
@@ -42,4 +46,47 @@ func SendLiveUrlService(roomId int) {
 			Parser: sendLiveUrl,
 		}
 	}()
+}
+
+// InsertVup 添加Vup订阅
+func InsertVup(msgMessage cq.MessageMessage) {
+	if msgMessage.IsAt() {
+		if msgMessage.IsMsgHave("订阅") {
+			message := msgMessage.Message
+			info := strings.Split(strings.Split(message, "订阅")[1], " ")
+			nickname := info[0]
+			roomId, atoiErr := strconv.Atoi(strings.TrimSpace(info[1]))
+			if atoiErr != nil {
+				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅信息有误,房间号不应有数字以外的字符! ")
+				return
+			}
+			sth := make([]map[string]interface{}, 0)
+			liver := make(map[string]interface{}, 1)
+			liver[conf.NicknameToml] = nickname
+			liver[conf.RoomIdToml] = roomId
+			sth = append(sth, liver)
+			err := conf.AddListConfig(conf.LiversToml, sth)
+			if err != nil {
+				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅失败, 请联系管理员! ")
+			} else {
+				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅成功! 正在读取直播列表请稍候……")
+			}
+		}
+	}
+}
+
+// DeleteVup 删除Vup订阅
+func DeleteVup(msgMessage cq.MessageMessage) {
+	if msgMessage.IsAt() {
+		if msgMessage.IsMsgHave("删除") {
+		}
+	}
+}
+
+// SelectVup 查询Vup订阅
+func SelectVup(msgMessage cq.MessageMessage) {
+	if msgMessage.IsAt() {
+		if msgMessage.IsMsgHave("查询") {
+		}
+	}
 }

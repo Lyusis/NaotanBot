@@ -20,6 +20,8 @@ Windows 下编译 Mac 和 Linux 64位可执行程序
     SET GOARCH=amd64
     go build main.go
 
+    gox -osarch="linux/amd64"
+
 pprof查看性能
 
     http://127.0.0.1:11451/debug/pprof/

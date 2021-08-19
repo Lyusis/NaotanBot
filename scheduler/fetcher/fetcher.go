@@ -28,9 +28,11 @@ func GetFetcher(url string) ([]byte, error) {
 	request = request.WithContext(ctx)
 
 	response, responseErr := http.DefaultClient.Do(request)
-	if responseErr != nil {
-		logger.Sugar.Warn(logger.FormatMsg("Failed response"), logger.FormatError(responseErr))
-		return nil, responseErr
+	if response.StatusCode != http.StatusOK {
+		if responseErr != nil {
+			logger.Sugar.Warn(logger.FormatMsg("Failed response"), logger.FormatError(responseErr))
+		}
+		return nil, fmt.Errorf("received HTTP request exception, Code: %d", response.StatusCode)
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -38,10 +40,6 @@ func GetFetcher(url string) ([]byte, error) {
 			logger.Sugar.Warn(logger.FormatMsg("Failed to close request"), logger.FormatError(err))
 		}
 	}(response.Body)
-
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("received HTTP request exception, Code: %d", response.StatusCode)
-	}
 
 	return ioutil.ReadAll(response.Body)
 }

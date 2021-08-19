@@ -5,7 +5,7 @@ import (
 	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/Lyusis/NaotanBot/service/basic"
 	biliServer "github.com/Lyusis/NaotanBot/service/bilibili/server"
-	cqServer "github.com/Lyusis/NaotanBot/service/cq/server"
+	cqServer "github.com/Lyusis/NaotanBot/service/server"
 	"github.com/Lyusis/NaotanBot/utils"
 	_ "net/http/pprof"
 	"os"

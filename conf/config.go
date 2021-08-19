@@ -94,16 +94,30 @@ func SetConf() {
 }
 
 // AddListConfig 添加多层级的Toml属性
-func AddListConfig(str string, sth []map[string]interface{}) {
+func AddListConfig(str string, sth []map[string]interface{}) error {
 	var (
 		mapList = make([]map[string]interface{}, 0)
 	)
 	switch str {
-	case "livers":
+	case LiversToml:
 		addLivers(&mapList, sth)
 	}
 	viper.Set(str, mapList)
-	writeInto()
+	err := writeInto()
+	return err
+}
+
+func DeleteListConfig(str string, sth []map[string]interface{}) error {
+	var (
+		mapList = make([]map[string]interface{}, 0)
+	)
+	switch str {
+	case LiversToml:
+		deleteLivers(&mapList, sth)
+	}
+	viper.Set(str, mapList)
+	err := writeInto()
+	return err
 }
 
 func addLivers(mapList *[]map[string]interface{}, sth []map[string]interface{}) {
@@ -116,12 +130,22 @@ func addLivers(mapList *[]map[string]interface{}, sth []map[string]interface{}) 
 	addConfUtil(RoomIdToml, sth, mapList)
 }
 
+func deleteLivers(mapList *[]map[string]interface{}, sth []map[string]interface{}) {
+	for _, liver := range Livers {
+		liverMap := make(map[string]interface{})
+		liverMap[NicknameToml] = liver.Nickname
+		liverMap[RoomIdToml] = liver.RoomId
+		*mapList = append(*mapList, liverMap)
+	}
+	addConfUtil(RoomIdToml, sth, mapList)
+}
+
 func AddPairConfig(str string, sth map[string]interface{}) {
 	switch str {
-	case "cqsenddest":
+	case CQSendDestToml:
 		viper.Set("cqsenddest.ip", CQSendDest.IP)
 		viper.Set("cqsenddest.port", CQSendDest.Port)
-	case "cqreceiver":
+	case CQReceiverToml:
 		viper.Set("cqreceiver.ip", CQReceiver.IP)
 		viper.Set("cqreceiver.port", CQReceiver.Port)
 	default:
@@ -176,11 +200,12 @@ func coverAndMergeMap(aMap, bMap map[interface{}]map[string]interface{}) map[int
 	return mergeMap
 }
 
-func writeInto() {
+func writeInto() error {
 	err := viper.WriteConfigAs(fileName)
 	if err != nil {
 		logger.Sugar.Error(logger.FormatMsg("Failed to write new config"), logger.FormatError(err))
 	}
+	return err
 }
 
 func DeleteConfig(key, value string) {
