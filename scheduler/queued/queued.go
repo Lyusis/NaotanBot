@@ -24,6 +24,7 @@ func (s *Scheduler) WorkerReady(
 }
 
 func (s *Scheduler) Run() {
+	// TODO: 队列长度可配置化
 	s.workerChan = make(chan chan engine.Request, conf.WorkerCount)
 	s.requestChan = make(chan engine.Request, conf.WorkerCount)
 	go func() {

@@ -12,42 +12,55 @@ type Sender struct {
 }
 
 type SendMessage interface {
-	SendGroupMessage(groupId string, message string)
-	SendPrivateMessage(userId string, message string)
+	SendGroupMessage(groupId, message string)
+	SendPrivateMessage(userId, message string)
 }
 
-func (cqSender *Sender) SendGroupMessage(groupId string, message string) {
+func (cqSender *Sender) SendGroupMessage(groupId, message string) {
 	cqSender.SendMessage.SendGroupMessage(groupId, message)
 }
 
-func (cqSender *Sender) SendPrivateMessage(groupId string, message string) {
+func (cqSender *Sender) SendPrivateMessage(groupId, message string) {
 	cqSender.SendMessage.SendPrivateMessage(groupId, message)
 }
 
-// SendGroupMsgObserveTarget 与target一致
-func (cqSender *Sender) SendGroupMsgObserveTarget(groupId string, message string, target, from interface{}) {
+// SendGroupMsgObservePersonTarget 监控指定人是否发消息, 发送群消息
+func (cqSender *Sender) SendGroupMsgObservePersonTarget(groupId, message string, target, from interface{}) {
 	if target == from {
 		cqSender.SendGroupMessage(groupId, message)
 	}
 }
 
-// SendGroupMsgObserveTargetString 存在target
-func (cqSender *Sender) SendGroupMsgObserveTargetString(groupId string, message string, target, from string) {
-	if strings.Contains(target, from) {
+// SendGroupMsgObserveAtString 监控是否被at, 发送群消息
+func (cqSender *Sender) SendGroupMsgObserveAtString(groupId, message string, msgMessage MessageMessage) {
+	if msgMessage.IsAt() {
 		cqSender.SendGroupMessage(groupId, message)
 	}
 }
 
-func (cqSender *Sender) AJun(message MessageMessage) {
-	cqSender.SendGroupMsgObserveTarget(conf.GroupId, "阿骏不要再舔了", 1565255741, message.UserId)
-}
-
+// At 当Bot被at时
 func (cqSender *Sender) At(message MessageMessage) {
-	cqSender.SendGroupMsgObserveTargetString(conf.GroupId, "?", "[CQ:at,qq="+conf.QQ+"]", message.Message)
+	cqSender.SendGroupMsgObserveAtString(conf.GroupId, "?", message)
 }
 
+// AutoReturn 当Bot被私聊时
 func (cqSender *Sender) AutoReturn(message MessageMessage) {
 	if strings.EqualFold(message.MessageType, "private") {
 		cqSender.SendPrivateMessage(strconv.Itoa(message.UserId), "?")
 	}
+}
+
+// IsMsgHave message中是否有该内容
+func (msgMessage *MessageMessage) IsMsgHave(shouldHave string) bool {
+	if strings.Contains(msgMessage.Message, shouldHave) {
+		return true
+	} else {
+		return false
+	}
+}
+
+// IsAt 判断bot是否被at
+func (msgMessage *MessageMessage) IsAt() bool {
+	at := "[CQ:at,qq=" + conf.QQ + "]"
+	return msgMessage.IsMsgHave(at)
 }

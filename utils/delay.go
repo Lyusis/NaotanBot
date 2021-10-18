@@ -1,13 +1,18 @@
 package utils
 
 import (
+	"github.com/Lyusis/NaotanBot/conf"
 	"math/rand"
 	"time"
 
 	"github.com/Lyusis/NaotanBot/logger"
 )
 
-func Delay(waitingSeed int) {
+const (
+	LongDelay = 1800
+)
+
+func Delay(waitingSeed int) <-chan time.Time {
 	if waitingSeed == 0 {
 		waitingSeed = 2
 	}
@@ -17,5 +22,10 @@ func Delay(waitingSeed int) {
 
 	logger.Sugar.Debug(logger.FormatMsg("Waiting"), logger.FormatTitle("Time"), waitTime)
 
-	<-rateLimiter
+	if waitingSeed == LongDelay {
+		logger.Sugar.Debug(logger.FormatMsg("Long Waiting Over"), logger.FormatTitle("Time"), LongDelay)
+		conf.SetConf()
+	}
+
+	return rateLimiter
 }

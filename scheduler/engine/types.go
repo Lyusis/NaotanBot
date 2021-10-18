@@ -1,11 +1,16 @@
 package engine
 
+const (
+	DelayOp = "DELAY OPERATION"
+)
+
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	SaveChan    chan interface{}
-	RequestChan chan Request
-	Workers     func(Request) (ResultItems, error)
+	Scheduler    Scheduler
+	WorkerCount  int
+	SaveChan     chan interface{}
+	RequestChan  chan Request
+	Workers      func(Request, chan ResultItems)
+	RoutineCount int64
 }
 
 type Scheduler interface {
