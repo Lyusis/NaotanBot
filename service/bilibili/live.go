@@ -56,7 +56,7 @@ func sendLiveStatus(contents []byte) engine.ResultItems {
 			name := getRoomName(liveData.RoomId)
 			saberchan.SendBarkMessage(name, "开播啦!")
 			cq.SendTool.SendGroupMessage(conf.GroupId, utils.SingleBack(name+"开播啦! 地址:https://live.bilibili.com/", liveData.RoomId))
-			SendLiveUrlService(liveData.RoomId)
+			//SendLiveUrlService(liveData.RoomId)
 			writeRoomStatusList(liveData.RoomId, true)
 		}
 	}
