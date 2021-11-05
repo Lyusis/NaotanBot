@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"github.com/Lyusis/NaotanBot/conf"
 	"math/rand"
 	"time"
 
+	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
 )
 

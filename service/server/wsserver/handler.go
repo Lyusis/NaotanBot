@@ -2,13 +2,11 @@ package wsserver
 
 import (
 	"encoding/json"
-	"net/http"
-	"strconv"
-
 	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/Lyusis/NaotanBot/service/cq"
 	"github.com/Lyusis/NaotanBot/service/server/register"
 	"github.com/gorilla/websocket"
+	"net/http"
 )
 
 var upgrader = websocket.Upgrader{
@@ -94,12 +92,12 @@ func WSApiHandler(w http.ResponseWriter, r *http.Request) {
 	}(conn)
 }
 
-func groupMessage(message string, groupId string) ([]byte, error) {
+func groupMessage(message string, groupId int) ([]byte, error) {
 	sendMessage := cq.GroupMessage{
 		Action: cq.SendGroup,
 	}
 	sendMessage.Params.Message = message
-	sendMessage.Params.GroupId, _ = strconv.Atoi(groupId)
+	sendMessage.Params.GroupId = groupId
 	marshal, err := json.Marshal(sendMessage)
 	if err != nil {
 		return nil, err
@@ -107,12 +105,12 @@ func groupMessage(message string, groupId string) ([]byte, error) {
 	return marshal, nil
 }
 
-func privateMessage(message string, privateId string) ([]byte, error) {
+func privateMessage(message string, privateId int) ([]byte, error) {
 	sendMessage := cq.IndividualMessage{
 		Action: cq.SendPrivate,
 	}
 	sendMessage.Params.Message = message
-	sendMessage.Params.UserId, _ = strconv.Atoi(privateId)
+	sendMessage.Params.UserId = privateId
 	marshal, err := json.Marshal(sendMessage)
 	if err != nil {
 		return nil, err

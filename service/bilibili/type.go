@@ -1,30 +1,43 @@
 package bilibili
 
 // LiveDataResponse 通用response数据/**
-type LiveDataResponse struct {
-	Data    LiveDataResponseData `json:"data"`
-	Msg     string               `json:"msg"`
-	Message string               `json:"message"`
-	Status  int                  `json:"status"`
-}
+//type LiveDataResponse struct {
+//	Data    LiveDataResponseData `json:"data"`
+//	Msg     string               `json:"msg"`
+//	Message string               `json:"message"`
+//	Status  int                  `json:"status"`
+//}
 
 type LiveDataResponseData struct {
-	IsHidden    bool `json:"is_hidden"`
-	IsLocked    bool `json:"is_locked"`
-	IsPortrait  bool `json:"is_portrait"`
-	Encrypted   bool `json:"encrypted"`
-	PwdVerified bool `json:"pwd_verified"`
-	RoomId      int  `json:"room_id"`
-	ShortId     int  `json:"short_id"`
-	Uid         int  `json:"uid"`
-	NeedP2p     int  `json:"need_p2p"`
-	LiveStatus  int  `json:"live_status"`
-	HiddenTill  int  `json:"hidden_till"`
-	LockTill    int  `json:"lock_till"`
-	LiveTime    int  `json:"live_time"`
-	RoomShield  int  `json:"room_shield"`
-	IsSp        int  `json:"is_sp"`
-	SpecialType int  `json:"special_type"`
+	Title            string `json:"title"`
+	RoomId           int    `json:"room_id"`
+	Uid              int    `json:"uid"`
+	Online           int    `json:"online"`
+	LiveTime         int    `json:"live_time"`
+	LiveStatus       int    `json:"live_status"`
+	ShortId          int    `json:"short_id"`
+	Area             int    `json:"area"`
+	AreaName         string `json:"area_name"`
+	AreaV2Id         int    `json:"area_v2_id"`
+	AreaV2Name       string `json:"area_v2_name"`
+	AreaV2ParentName string `json:"area_v2_parent_name"`
+	AreaV2ParentId   int    `json:"area_v2_parent_id"`
+	Uname            string `json:"uname"`
+	Face             string `json:"face"`
+	TagName          string `json:"tag_name"`
+	Tags             string `json:"tags"`
+	CoverFromUser    string `json:"cover_from_user"`
+	Keyframe         string `json:"keyframe"`
+	LockTill         string `json:"lock_till"`
+	HiddenTill       string `json:"hidden_till"`
+	BroadcastType    int    `json:"broadcast_type"`
+}
+
+type LiveDataResponse struct {
+	Data    map[string]LiveDataResponseData `json:"data"`
+	Msg     string                          `json:"msg"`
+	Message string                          `json:"message"`
+	Code    int                             `json:"code"`
 }
 
 type LivingUrl struct {

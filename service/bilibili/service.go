@@ -1,6 +1,11 @@
 package bilibili
 
 import (
+	"container/list"
+	"encoding/json"
+	"github.com/Lyusis/NaotanBot/logger"
+	"github.com/Lyusis/NaotanBot/scheduler/fetcher"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -8,85 +13,118 @@ import (
 	"github.com/Lyusis/NaotanBot/scheduler/engine"
 	"github.com/Lyusis/NaotanBot/scheduler/instance"
 	"github.com/Lyusis/NaotanBot/service/cq"
+	"github.com/Lyusis/NaotanBot/service/redis"
 	"github.com/Lyusis/NaotanBot/utils"
 )
 
 // SendLiveStatusService bilibili直播通知
 func SendLiveStatusService() {
-	const baseurl = "https://api.live.bilibili.com/room/v1/Room/room_init?id="
+	const baseurl = "https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids"
 	go func() {
 		for {
 			// 获取直播状态
-			if conf.ReLoad {
-				conf.CheckedReload()
+			if Reload {
+				Reload = false
 				reloadRoomList()
 			}
 			<-utils.Delay(conf.Waiting)
-			for _, room := range RoomList {
-				url := utils.SingleBack(baseurl, room.Liver.RoomId)
-				instance.ConcurrentEngineWorker.RequestChan <- engine.Request{
-					Url:    url,
-					Name:   room.Liver.Nickname,
-					Parser: sendLiveStatus,
-				}
+			if len(LiverList) == 0 {
+				continue
 			}
-		}
-	}()
-}
-
-// SendLiveUrlService 获取bilibili直播源
-func SendLiveUrlService(roomId int) {
-	const baseurl0 = "https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id="
-	const baseurl1 = "&no_playurl=0&mask=1&qn=10000&platform=web&protocol=0,1&format=0,2&codec=0,1"
-	go func() {
-		// 获取直播链接
-		instance.ConcurrentEngineWorker.RequestChan <- engine.Request{
-			Url:    utils.Double(baseurl0, baseurl1, roomId),
-			Name:   getRoomName(roomId),
-			Parser: sendLiveUrl,
+			body := make(map[string][]string)
+			for _, room := range LiverList {
+				body["uids"] = append(body["uids"], strconv.Itoa(room.Liver.Uid))
+			}
+			bytesData, err := json.Marshal(body)
+			if err != nil {
+				logger.Sugar.Warn(logger.FormatMsg("Failed to marshal json"), logger.FormatError(err))
+				return
+			}
+			instance.ConcurrentEngineWorker.RequestChan <- engine.Request{
+				Url:    baseurl,
+				Method: http.MethodPost,
+				Name:   "获取主播信息",
+				Body:   bytesData,
+				Parser: sendLiveStatus,
+			}
 		}
 	}()
 }
 
 // InsertVup 添加Vup订阅
 func InsertVup(msgMessage cq.MessageMessage) {
-	if msgMessage.IsAt() {
-		if msgMessage.IsMsgHave("订阅") {
-			message := msgMessage.Message
-			info := strings.Split(strings.Split(message, "订阅")[1], " ")
-			nickname := info[0]
-			roomId, atoiErr := strconv.Atoi(strings.TrimSpace(info[1]))
-			if atoiErr != nil {
-				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅信息有误,房间号不应有数字以外的字符! ")
-				return
-			}
-			sth := make([]map[string]interface{}, 0)
-			liver := make(map[string]interface{}, 1)
-			liver[conf.NicknameToml] = nickname
-			liver[conf.RoomIdToml] = roomId
-			sth = append(sth, liver)
-			err := conf.AddListConfig(conf.LiversToml, sth)
-			if err != nil {
-				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅失败, 请联系管理员! ")
-			} else {
-				cq.SendTool.SendGroupMessage(conf.GroupId, "订阅成功! 正在读取直播列表请稍候……")
-			}
+	commands := "订阅 {uid} {nickname}"
+	msgMessage.AtFilter(commands, func(params *list.List, SendTool cq.Sender) (string, error) {
+		var (
+			err      error
+			nickname string
+			uid      int
+		)
+		uid, err = strconv.Atoi(strings.TrimSpace(utils.PopUp(params)))
+		if err != nil {
+			return "订阅信息有误,uid不应有数字以外的字符! ", err
 		}
-	}
+		nickname = utils.PopUp(params)
+		if nickname == "" {
+			url := "https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids"
+			body := make(map[string][]string)
+			body["uids"] = append(body["uids"], strconv.Itoa(uid))
+			var (
+				response  LiveDataResponse
+				bytesData []byte
+				contents  []byte
+			)
+			bytesData, err = json.Marshal(body)
+			if err == nil {
+				contents, err = fetcher.Fetcher(url, http.MethodPost, bytesData)
+				if err == nil {
+					err = json.Unmarshal(contents, &response)
+					if err == nil {
+						if name := response.Data[strconv.Itoa(uid)].Uname; name != "" {
+							err = redis.SetAdd("Liver", utils.SingleFrontInt(uid, ":"+name))
+						}
+					}
+				}
+			}
+		} else {
+			err = redis.SetAdd("Liver", utils.SingleFrontInt(uid, ":"+nickname))
+		}
+		Reload = true
+		return "订阅失败, 请联系管理员!", err
+	})
 }
 
 // DeleteVup 删除Vup订阅
 func DeleteVup(msgMessage cq.MessageMessage) {
-	if msgMessage.IsAt() {
-		if msgMessage.IsMsgHave("删除") {
-		}
-	}
+	commands := "删除订阅 {keyword}"
+	msgMessage.AtFilter(commands, func(params *list.List, SendTool cq.Sender) (string, error) {
+		var (
+			member string
+		)
+		member = utils.PopUp(params)
+		Reload = true
+		return "删除失败, 请联系管理员! ",
+			redis.SetDelete("Liver", member)
+	})
 }
 
 // SelectVup 查询Vup订阅
 func SelectVup(msgMessage cq.MessageMessage) {
-	if msgMessage.IsAt() {
-		if msgMessage.IsMsgHave("查询") {
+	commands := "订阅列表"
+	msgMessage.SingleAtFilter(commands, func(SendTool cq.Sender) {
+		var (
+			livers []string
+			result string
+			err    error
+		)
+		livers, err = redis.SetGet("Liver")
+		if err != nil {
+			cq.SendTool.SendGroupMessage(conf.GroupId, "无法获取订阅列表")
+			return
 		}
-	}
+		for _, item := range livers {
+			result += item + "\n"
+		}
+		cq.SendTool.SendGroupMessage(conf.GroupId, result)
+	})
 }

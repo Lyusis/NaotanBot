@@ -8,3 +8,4 @@ session.token
 device.json
 data/
 logs/
+/test/conf/

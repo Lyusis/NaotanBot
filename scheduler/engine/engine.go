@@ -24,7 +24,7 @@ func (engine *ConcurrentEngine) Run() {
 				// TODO: 将数据放入数据库
 				for _, item := range result.Items {
 					if item != DelayOp {
-						engine.SaveChan <- item
+						//engine.SaveChan <- item
 					} else {
 						// Magic Count
 						conf.Waiting = utils.LongDelay

@@ -12,30 +12,36 @@ import (
 
 // 全局配置变量
 var (
-	// Livers vup信息
-	Livers []Liver
+	// RedisInfo 地址
+	RedisInfo = Redis{}
 	// CQReceiver Ip of receive information
 	CQReceiver = Addr{}
 	// CQSendDest IP of send information
 	CQSendDest = Addr{}
 	// SaberchanCode Saberchan send code
 	SaberchanCode = ""
-	// QQ Bot's QQ
-	QQ = ""
-	// GroupId Id of QQ Group
-	GroupId = ""
 	// Token Access token
 	Token = ""
 	// Announcement Update Message
 	Announcement = ""
 	// QuitMessage Quit Message
 	QuitMessage = ""
+	// QQ Bot's QQ
+	QQ = 0
+	// GroupId Id of QQ Group
+	GroupId = 0
 	//WorkerCount Count of worker
 	WorkerCount = 0
 	// Waiting Rate limiting seed, Second, default 10s
 	Waiting = 0
+	// AJun 阿骏的qq
+	AJun = 0
+	// WeatherSecret 天气密钥
+	WeatherSecret = ""
 	// ReLoad 更新通知
-	ReLoad bool
+	ReLoad = false
+	// NewsKey 新闻用key
+	NewsKey = ""
 )
 
 // 本地变量
@@ -66,9 +72,6 @@ func init() {
 	}
 	viper.OnConfigChange(watch)
 
-	// RoomList[6775697] = "海苹果小学校"
-	// RoomList[22470204] = "瑞芙"
-	// RoomList[21672023] = "弥希"
 }
 
 func Reloading()     { ReLoad = true }
@@ -80,7 +83,8 @@ func SetConf() {
 	if err := viper.Unmarshal(config); err != nil {
 		logger.Sugar.Error(logger.FormatMsg("Failed to unmarshal configure file"), logger.FormatError(err))
 	}
-	Livers = config.Livers
+	// Livers = config.Livers
+	RedisInfo = config.RedisInfo
 	CQReceiver = config.CQReceiver
 	CQSendDest = config.CQSendDest
 	SaberchanCode = config.SaberchanCode
@@ -91,6 +95,9 @@ func SetConf() {
 	QuitMessage = config.Quit
 	WorkerCount = config.WorkerCount
 	Waiting = config.Waiting
+	WeatherSecret = config.WeatherSecret
+	AJun = config.AJun
+	NewsKey = config.NewsKey
 }
 
 // AddListConfig 添加多层级的Toml属性
@@ -99,8 +106,6 @@ func AddListConfig(str string, sth []map[string]interface{}) error {
 		mapList = make([]map[string]interface{}, 0)
 	)
 	switch str {
-	case LiversToml:
-		addLivers(&mapList, sth)
 	}
 	viper.Set(str, mapList)
 	err := writeInto()
@@ -112,32 +117,10 @@ func DeleteListConfig(str string, sth []map[string]interface{}) error {
 		mapList = make([]map[string]interface{}, 0)
 	)
 	switch str {
-	case LiversToml:
-		deleteLivers(&mapList, sth)
 	}
 	viper.Set(str, mapList)
 	err := writeInto()
 	return err
-}
-
-func addLivers(mapList *[]map[string]interface{}, sth []map[string]interface{}) {
-	for _, liver := range Livers {
-		liverMap := make(map[string]interface{})
-		liverMap[NicknameToml] = liver.Nickname
-		liverMap[RoomIdToml] = liver.RoomId
-		*mapList = append(*mapList, liverMap)
-	}
-	addConfUtil(RoomIdToml, sth, mapList)
-}
-
-func deleteLivers(mapList *[]map[string]interface{}, sth []map[string]interface{}) {
-	for _, liver := range Livers {
-		liverMap := make(map[string]interface{})
-		liverMap[NicknameToml] = liver.Nickname
-		liverMap[RoomIdToml] = liver.RoomId
-		*mapList = append(*mapList, liverMap)
-	}
-	addConfUtil(RoomIdToml, sth, mapList)
 }
 
 func AddPairConfig(str string, sth map[string]interface{}) {

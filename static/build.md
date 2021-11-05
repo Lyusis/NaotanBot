@@ -10,16 +10,12 @@ Linux 下编译 Mac 和 Windows 64位可执行程序
 
 Windows 下编译 Mac 和 Linux 64位可执行程序
 
+    // 未知失效
     SET CGO_ENABLED=0
     SET GOOS=darwin
     SET GOARCH=amd64
     go build main.go
-    
-    SET CGO_ENABLED=0
-    SET GOOS=linux
-    SET GOARCH=amd64
-    go build main.go
-
+    // 可用
     gox -osarch="linux/amd64"
 
 pprof查看性能

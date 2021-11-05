@@ -1,33 +1,33 @@
 package conf
 
-type Liver struct {
-	Nickname string
-	RoomId   int
-}
-
 type Addr struct {
 	IP   string
 	Port int
 }
+type Redis struct {
+	IP       string
+	Port     int
+	Password string
+}
 
 type Configuration struct {
-	Livers        []Liver
+	RedisInfo     Redis
 	CQReceiver    Addr
 	CQSendDest    Addr
 	SaberchanCode string
-	GroupId       string
-	QQ            string
 	Token         string
 	Announcement  string
 	Quit          string
+	WeatherSecret string
+	NewsKey       string
+	QQ            int
+	GroupId       int
+	AJun          int
 	WorkerCount   int
 	Waiting       int
 }
 
 const (
-	LiversToml        = "livers"
-	NicknameToml      = "nickname"
-	RoomIdToml        = "roomid"
 	CQReceiverToml    = "cqreceiver"
 	CQSendDestToml    = "cqsenddest"
 	SaberchanCodeToml = "saberchancode"
@@ -40,4 +40,8 @@ const (
 	WaitingToml       = "waiting"
 	IPToml            = "ip"
 	PortToml          = "port"
+	RedisInfoToml     = "redisinfo"
+	WeatherSecretToml = "weathersecret"
+	AJunToml          = "ajun"
+	NewsKeyToml       = "newskey"
 )

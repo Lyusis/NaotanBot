@@ -11,11 +11,14 @@ import (
 func Worker(request Request, resultItemsChan chan ResultItems) {
 
 	if request.Name != "" {
-		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url, logger.FormatTitle("NickName"), request.Name)
+		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url, logger.FormatTitle("MissionTitle"), request.Name)
 	} else {
 		logger.Sugar.Info(logger.FormatMsg("Fetching"), logger.FormatTitle("URL"), request.Url)
 	}
-	body, bodyErr := fetcher.GetFetcher(request.Url)
+	if request.Method == "" {
+		request.Method = http.MethodGet
+	}
+	body, bodyErr := fetcher.Fetcher(request.Url, request.Method, request.Body)
 	if bodyErr != nil {
 		logger.Sugar.Warn(logger.FormatMsg("Failed to receive request body"), bodyErr)
 		errStr := bodyErr.Error()

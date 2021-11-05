@@ -1,19 +1,29 @@
 package bilibili
 
 import (
+	"github.com/Lyusis/NaotanBot/service/cq"
+	"github.com/Lyusis/NaotanBot/service/redis"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/Lyusis/NaotanBot/conf"
 )
 
-type liveRoom struct {
-	Liver  conf.Liver
+type Liver struct {
+	Nickname string
+	Uid      int
+}
+
+type liveStatus struct {
+	Liver  Liver
 	Status bool
 }
 
 var (
-	// RoomList Map of LivingRoom
-	RoomList = make([]liveRoom, 0)
+	Reload bool
+	// LiverList Map of LivingRoom
+	LiverList = make([]liveStatus, 0)
 	// mu 读写锁
 	mu sync.RWMutex
 )
@@ -23,57 +33,80 @@ func init() {
 }
 
 func loadRoomList() {
-	RoomList = make([]liveRoom, 0)
-	for _, liver := range conf.Livers {
-		room := liveRoom{Liver: conf.Liver{RoomId: liver.RoomId, Nickname: liver.Nickname}, Status: false}
-		RoomList = append(RoomList, room)
+	var (
+		liversData []string
+		err        error
+	)
+	liversData, err = redis.SetGet("Liver")
+	if err != nil {
+		cq.SendTool.SendGroupMessage(conf.GroupId, "获取liver信息失败")
+		return
 	}
-}
+	LiverList = make([]liveStatus, 0)
 
-func reloadRoomList() {
-	oldList := RoomList
-	loadRoomList()
-	for _, room := range oldList {
-		if room.Status {
-			writeRoomStatusList(room.Liver.RoomId, true)
+	for _, liver := range liversData {
+		info := strings.Split(liver, ":")
+		if len(info) == 2 {
+			var (
+				nickname string
+				uid      int
+			)
+			uid, err = strconv.Atoi(info[0])
+			if err != nil {
+				break
+			}
+			nickname = info[1]
+			room := liveStatus{Liver: Liver{Uid: uid, Nickname: nickname}, Status: false}
+			LiverList = append(LiverList, room)
 		}
 	}
 }
 
-func writeRoomStatusList(roomId int, status bool) {
+func reloadRoomList() {
+	oldList := LiverList
+	loadRoomList()
+	cq.SendTool.SendGroupMessage(conf.GroupId, "正在更新Liver列表")
+	for _, room := range oldList {
+		if room.Status {
+			writeRoomStatusList(room.Liver.Uid, true)
+		}
+	}
+}
+
+func writeRoomStatusList(uid int, status bool) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	for i := 0; i < len(RoomList); i++ {
-		if RoomList[i].Liver.RoomId == roomId {
-			roomP := &RoomList[i]
+	for i := 0; i < len(LiverList); i++ {
+		if LiverList[i].Liver.Uid == uid {
+			roomP := &LiverList[i]
 			roomP.Status = status
 			break
 		}
 	}
 }
 
-func getRoomStatus(roomId int) bool {
+func getRoomStatus(uid int) bool {
 	mu.RLock()
 	defer mu.RUnlock()
 
 	status := false
-	for _, room := range RoomList {
-		if room.Liver.RoomId == roomId {
+	for _, room := range LiverList {
+		if room.Liver.Uid == uid {
 			status = room.Status
 		}
 	}
 	return status
 }
 
-func getRoomName(roomId int) string {
+func getRoomName(uid int) string {
 	mu.RLock()
 	defer mu.RUnlock()
 
 	name := ""
-	for _, room := range RoomList {
-		if room.Liver.RoomId == roomId {
-			name = room.Liver.Nickname
+	for _, liver := range LiverList {
+		if liver.Liver.Uid == uid {
+			name = liver.Liver.Nickname
 		}
 	}
 	return name

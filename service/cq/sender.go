@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/Lyusis/NaotanBot/conf"
 	"github.com/Lyusis/NaotanBot/logger"
@@ -13,14 +14,14 @@ import (
 // WSSender websocket
 type WSSender struct{}
 
-func (sender *WSSender) SendGroupMessage(groupId string, message string) {
+func (sender *WSSender) SendGroupMessage(groupId int, message string) {
 	msgBox := MsgBox{
 		Action: SendGroup, Id: groupId, Message: message,
 	}
 	MsgBoxChan <- msgBox
 }
 
-func (sender *WSSender) SendPrivateMessage(userId string, message string) {
+func (sender *WSSender) SendPrivateMessage(userId int, message string) {
 	msgBox := MsgBox{
 		Action: SendPrivate, Id: userId, Message: message,
 	}
@@ -30,9 +31,16 @@ func (sender *WSSender) SendPrivateMessage(userId string, message string) {
 // HttpSender http
 type HttpSender struct{}
 
-func (sender *HttpSender) SendGroupMessage(groupId string, message string) {
-	client := &http.Client{}
-	urlStr := fmt.Sprintf("http://%s:%d/send_group_msg?group_id=%s&message=%s", conf.CQSendDest.IP, conf.CQSendDest.Port, groupId, message)
+func (sender *HttpSender) SendGroupMessage(groupId int, message string) {
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+		Transport: &http.Transport{
+			TLSHandshakeTimeout:   15 * time.Second,
+			ResponseHeaderTimeout: 15 * time.Second,
+			ExpectContinueTimeout: 1 * time.Second,
+		},
+	}
+	urlStr := fmt.Sprintf("http://%s:%d/send_group_msg?group_id=%d&message=%s", conf.CQSendDest.IP, conf.CQSendDest.Port, groupId, message)
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token
 	}
@@ -45,8 +53,15 @@ func (sender *HttpSender) SendGroupMessage(groupId string, message string) {
 	utils.BasicReceiver(client.Do(request))
 }
 
-func (sender *HttpSender) SendPrivateMessage(userId string, message string) {
-	client := &http.Client{}
+func (sender *HttpSender) SendPrivateMessage(userId int, message string) {
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+		Transport: &http.Transport{
+			TLSHandshakeTimeout:   15 * time.Second,
+			ResponseHeaderTimeout: 15 * time.Second,
+			ExpectContinueTimeout: 1 * time.Second,
+		},
+	}
 	urlStr := fmt.Sprintf("http://%s:%d/send_private_msg?user_id=%s&message=%s", conf.CQSendDest.IP, conf.CQSendDest.Port, userId, message)
 	if !strings.EqualFold("", conf.Token) {
 		urlStr += "&access_token=" + conf.Token

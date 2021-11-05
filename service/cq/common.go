@@ -11,8 +11,8 @@ const (
 
 type MsgBox struct {
 	Action  string
-	Id      string
 	Message string
+	Id      int
 }
 
 var (

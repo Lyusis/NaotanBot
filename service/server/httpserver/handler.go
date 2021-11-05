@@ -2,12 +2,12 @@ package httpserver
 
 import (
 	"encoding/json"
-	"github.com/Lyusis/NaotanBot/service/server/register"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/Lyusis/NaotanBot/logger"
 	"github.com/Lyusis/NaotanBot/service/cq"
+	"github.com/Lyusis/NaotanBot/service/server/register"
 )
 
 func Handler(_ http.ResponseWriter, r *http.Request) {

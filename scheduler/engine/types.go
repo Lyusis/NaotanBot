@@ -23,6 +23,8 @@ type Scheduler interface {
 type Request struct {
 	Url    string
 	Name   string
+	Method string
+	Body   []byte
 	Parser func([]byte) ResultItems
 }
 
