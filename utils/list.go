@@ -12,3 +12,14 @@ func PopUp(list *list.List) string {
 	}
 	return ""
 }
+
+func ArrayToStack(array []string) *list.List {
+	var (
+		stack *list.List
+	)
+
+	for _, str := range array {
+		stack.PushBack(str)
+	}
+	return stack
+}

@@ -51,15 +51,18 @@ func SetDelete(key, member string) (err error) {
 	}
 
 	data, err := rdb.SMembers(ctx, key).Result()
+	if err != nil {
+		return err
+	}
 
 	for _, item := range data {
 		if strings.Contains(item, member) {
 			member = item
-			break
+			err = rdb.SRem(ctx, key, member).Err()
 		}
 	}
 
-	return rdb.SRem(ctx, key, member).Err()
+	return err
 }
 
 func SetGet(key string) (data []string, err error) {

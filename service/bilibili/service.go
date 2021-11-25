@@ -58,9 +58,11 @@ func InsertVup(msgMessage cq.MessageMessage) {
 		var (
 			err      error
 			nickname string
-			uid      int
+			uidInt   int
+			uid      string
 		)
-		uid, err = strconv.Atoi(strings.TrimSpace(utils.PopUp(params)))
+		uidInt, err = strconv.Atoi(strings.TrimSpace(utils.PopUp(params)))
+		uid = strconv.Itoa(uidInt)
 		if err != nil {
 			return "订阅信息有误,uid不应有数字以外的字符! ", err
 		}
@@ -68,7 +70,7 @@ func InsertVup(msgMessage cq.MessageMessage) {
 		if nickname == "" {
 			url := "https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids"
 			body := make(map[string][]string)
-			body["uids"] = append(body["uids"], strconv.Itoa(uid))
+			body["uids"] = append(body["uids"], uid)
 			var (
 				response  LiveDataResponse
 				bytesData []byte
@@ -80,14 +82,22 @@ func InsertVup(msgMessage cq.MessageMessage) {
 				if err == nil {
 					err = json.Unmarshal(contents, &response)
 					if err == nil {
-						if name := response.Data[strconv.Itoa(uid)].Uname; name != "" {
-							err = redis.SetAdd("Liver", utils.SingleFrontInt(uid, ":"+name))
+						if name := response.Data[uid].Uname; name != "" {
+							err = redis.SetDelete("Liver", uid)
+							if err != nil {
+								return "订阅失败", err
+							}
+							err = redis.SetAdd("Liver", uid+":"+name)
 						}
 					}
 				}
 			}
 		} else {
-			err = redis.SetAdd("Liver", utils.SingleFrontInt(uid, ":"+nickname))
+			err = redis.SetDelete("Liver", uid)
+			if err != nil {
+				return "订阅失败", err
+			}
+			err = redis.SetAdd("Liver", uid+":"+nickname)
 		}
 		Reload = true
 		return "订阅失败, 请联系管理员!", err

@@ -19,7 +19,7 @@ func AJun(msgMessage cq.MessageMessage) {
 		if err != nil {
 			logger.Sugar.Warn(logger.FormatMsg("Failed to get AJun Words"), err)
 			cq.SendTool.SendGroupMessage(conf.GroupId, "数据异常, 无法辱骂阿骏")
-		} else if len(data) != 0 {
+		} else if len(data) > 0 {
 			p := rand.Intn(len(data) - 1)
 			cq.SendTool.SendGroupMessage(conf.GroupId, data[p])
 		}

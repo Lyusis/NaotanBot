@@ -2,11 +2,11 @@ package cq
 
 import (
 	"container/list"
-	"github.com/Lyusis/NaotanBot/utils"
 	"strconv"
 	"strings"
 
 	"github.com/Lyusis/NaotanBot/conf"
+	"github.com/Lyusis/NaotanBot/utils"
 )
 
 var (
@@ -85,7 +85,7 @@ func (msgMessage *MessageMessage) AtFilter(commands string,
 		)
 		// 数据处理及具体实施
 		inputList = inputList[1:]
-		if len(commandList) > len(inputList) {
+		if len(commandList) < len(inputList) {
 			return
 		}
 		for index, input := range inputList {
@@ -100,12 +100,14 @@ func (msgMessage *MessageMessage) AtFilter(commands string,
 				}
 			}
 		}
+
 		resultMsg, err := todo(&params, SendTool)
 		if err != nil {
 			SendTool.SendGroupMessage(conf.GroupId, resultMsg)
 		}
 		SendTool.SendGroupMessage(conf.GroupId, "操作完成! ")
 	}
+
 }
 
 func (msgMessage *MessageMessage) SingleAtFilter(commands string, todo func(sender Sender)) {
