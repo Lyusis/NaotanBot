@@ -1,2 +1,2 @@
 # NaotanBot
-A monitor of naotan in Bilibili
+A monitor of Livers in Bilibili
